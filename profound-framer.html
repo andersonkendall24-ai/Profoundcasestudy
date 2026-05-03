@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profound · Action Plan — Case Study by Kendall Anderson</title>
+<style>
+  /* =============================================================
+     PROFOUND CASE STUDY — FRAMER-READY · v2 (tightened)
+     Single self-contained HTML. 3 sections + Live Prototype.
+
+     Reframed around the buyer-defensible value prop:
+     Understand · Explain · Ship.
+
+     STRUCTURE FOR FRAMER IMPORT:
+     - <nav> sticky top nav
+     - <section id="block-01"> Problem
+     - <section id="block-02"> Solution (with video slots)
+     - <section id="block-03"> Impact + Sources
+     - <section id="live"> Live prototype CTA
+     - <footer>
+     ============================================================= */
+
+  :root {
+    --bg: #08090C;
+    --bg-2: #0E1014;
+    --bg-3: #111217;
+    --panel: #16171D;
+    --panel-2: #1A1C22;
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --text: #FFFFFF;
+    --text-2: rgba(255, 255, 255, 0.84);
+    --text-3: rgba(255, 255, 255, 0.55);
+    --text-4: rgba(255, 255, 255, 0.36);
+    --accent: #FFEA35;
+    --accent-soft: rgba(255, 234, 53, 0.14);
+    --accent-deep: #E0CC1A;
+    --good: #22C55E;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* =================== STICKY NAV =================== */
+  .cs-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(8, 9, 12, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .cs-nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    padding: 18px 32px;
+    display: flex; align-items: center; gap: 24px;
+  }
+  .cs-nav .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 600; font-size: 15px;
+    letter-spacing: -0.2px;
+    margin-right: auto;
+  }
+  .cs-nav .brand .mark {
+    width: 22px; height: 22px; border-radius: 5px;
+    background: white;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .cs-nav .brand .mark::after {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    background: black;
+    clip-path: polygon(0 0, 100% 0, 100% 60%, 60% 100%, 0 100%);
+  }
+  .cs-nav .brand .by { color: var(--text-3); font-weight: 400; margin-left: 6px; }
+  .cs-nav-links { display: flex; gap: 4px; align-items: center; }
+  .cs-nav a {
+    font-size: 13px; font-weight: 500; color: var(--text-3);
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: all 120ms;
+  }
+  .cs-nav a:hover { color: var(--text); background: var(--panel); }
+  .cs-nav a.active { color: var(--text); }
+  .cs-nav a.cta {
+    background: var(--accent); color: #000;
+    font-weight: 600;
+    padding: 8px 16px;
+    margin-left: 8px;
+  }
+  .cs-nav a.cta:hover { background: var(--accent-deep); color: #000; }
+
+  /* =================== HERO =================== */
+  .cs-hero {
+    padding: 96px 32px 80px;
+    background:
+      radial-gradient(circle at 80% 0%, rgba(255, 234, 53, 0.06) 0%, transparent 60%),
+      var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .cs-hero-inner { max-width: 1100px; margin: 0 auto; }
+  .cs-eyebrow {
+    display: inline-block;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.6px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 6px 12px; border-radius: 100px;
+    margin-bottom: 32px;
+    text-transform: uppercase;
+  }
+  .cs-h1 {
+    font-size: clamp(40px, 6vw, 76px);
+    line-height: 1.04;
+    letter-spacing: -2px;
+    font-weight: 600;
+    margin: 0 0 24px;
+    max-width: 1000px;
+  }
+  .cs-h1 mark { background: transparent; color: var(--accent); }
+  .cs-lede {
+    font-size: 21px; line-height: 1.55; color: var(--text-3);
+    max-width: 760px; margin: 0 0 40px;
+    font-weight: 400;
+  }
+  .cs-byline {
+    display: flex; gap: 16px 28px; flex-wrap: wrap;
+    align-items: center;
+    font-size: 13px; color: var(--text-3);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 22px 0;
+  }
+  .cs-byline strong { color: var(--text); font-weight: 500; }
+  .cs-byline .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-4); }
+
+  /* TL;DR strip */
+  .cs-tldr {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .cs-tldr-cell {
+    padding: 28px;
+    border-right: 1px solid var(--border);
+  }
+  .cs-tldr-cell:last-child { border-right: none; }
+  .cs-tldr .step {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.6px;
+    color: var(--accent); margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .cs-tldr h3 { font-size: 22px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.5px; }
+  .cs-tldr p { font-size: 13px; color: var(--text-3); margin: 0; line-height: 1.55; }
+
+  /* =================== SECTION SCAFFOLD =================== */
+  .cs-section { padding: 96px 32px; border-bottom: 1px solid var(--border); }
+  .cs-section.alt { background: var(--bg-2); }
+  .cs-inner { max-width: 1100px; margin: 0 auto; }
+
+  .cs-block-num {
+    font-size: 12px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: inline-block;
+  }
+  .cs-h2 {
+    font-size: clamp(32px, 4.4vw, 52px);
+    line-height: 1.12;
+    letter-spacing: -1.2px;
+    font-weight: 600;
+    margin: 0 0 24px;
+    max-width: 900px;
+  }
+  .cs-h2 mark { background: transparent; color: var(--accent); }
+  .cs-h3 { font-size: 24px; line-height: 1.3; font-weight: 600; letter-spacing: -0.4px; margin: 0 0 16px; }
+  .cs-h4 { font-size: 16px; font-weight: 600; margin: 0 0 8px; }
+  .cs-p {
+    font-size: 17px; line-height: 1.65;
+    color: var(--text-2); margin: 0 0 20px;
+    max-width: 760px;
+  }
+  .cs-p.muted { color: var(--text-3); font-size: 15px; }
+  .cs-p mark { background: var(--accent-soft); color: var(--accent); padding: 1px 4px; border-radius: 3px; }
+
+  /* =================== BLOCK 01: PROBLEM =================== */
+  .cs-themes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 40px 0 16px;
+  }
+  .cs-theme {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    transition: border-color 200ms;
+  }
+  .cs-theme:hover { border-color: var(--border-strong); }
+  .cs-theme .theme-tag {
+    display: inline-block;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.4px;
+    color: var(--accent);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .cs-theme .qmark {
+    font-family: Georgia, serif;
+    font-size: 48px; line-height: 0.6;
+    color: var(--text-4);
+    display: block; margin-bottom: 12px;
+  }
+  .cs-theme p {
+    font-size: 15px; line-height: 1.55;
+    color: var(--text); margin: 0;
+    font-weight: 400;
+  }
+
+  .cs-persona {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 28px;
+    align-items: start;
+    margin-top: 40px;
+  }
+  .cs-avatar {
+    width: 96px; height: 96px; border-radius: 50%;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    color: #000; font-weight: 700; font-size: 32px;
+    letter-spacing: -1px;
+  }
+  .cs-persona h4 { font-size: 22px; margin: 0 0 4px; letter-spacing: -0.3px; }
+  .cs-persona .role { font-size: 14px; color: var(--text-3); margin-bottom: 16px; }
+  .cs-persona ul { margin: 0; padding-left: 20px; font-size: 15px; color: var(--text-2); }
+  .cs-persona li { margin-bottom: 8px; line-height: 1.5; }
+  .cs-persona li strong { color: var(--text); }
+
+  .cs-insight {
+    background: linear-gradient(135deg, var(--bg-3) 0%, var(--panel) 100%);
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    padding: 44px 48px;
+    margin-top: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cs-insight::before {
+    content: '';
+    position: absolute; top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+    opacity: 0.18;
+  }
+  .cs-insight .label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.6px;
+    color: var(--accent); margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .cs-insight p {
+    font-size: clamp(20px, 2.4vw, 28px);
+    line-height: 1.4; margin: 0;
+    letter-spacing: -0.4px;
+    color: var(--text);
+    max-width: none;
+  }
+  .cs-insight strong { color: var(--accent); font-weight: 600; }
+
+  /* =================== BLOCK 02: SOLUTION =================== */
+  .cs-screen-block { margin: 56px 0; }
+  .cs-screen-frame {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+  }
+  .cs-screen-frame .chrome {
+    display: flex; align-items: center; gap: 6px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-2);
+  }
+  .cs-screen-frame .chrome .dot {
+    width: 11px; height: 11px; border-radius: 50%; background: rgba(255,255,255,0.12);
+  }
+  .cs-screen-frame .chrome .url {
+    flex: 1; text-align: center;
+    font-size: 11px; color: var(--text-3);
+    font-family: ui-monospace, monospace;
+  }
+  .cs-screen-img {
+    width: 100%; aspect-ratio: 16 / 10;
+    background: var(--bg);
+    display: block;
+  }
+
+  .cs-video-slot {
+    position: relative;
+    background: var(--bg);
+    border: 2px dashed var(--border-strong);
+    border-radius: 0;
+    aspect-ratio: 16 / 10;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 200ms, background 200ms;
+  }
+  .cs-video-slot.standalone {
+    border-radius: 20px;
+    aspect-ratio: 16 / 9;
+    margin: 32px 0;
+  }
+  .cs-video-slot:hover { border-color: var(--accent); background: var(--bg-2); }
+  .cs-video-slot::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 234, 53, 0.04), transparent 60%);
+  }
+  .cs-video-content { position: relative; text-align: center; padding: 24px; }
+  .cs-play {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 18px;
+    transition: transform 200ms;
+  }
+  .cs-video-slot:hover .cs-play { transform: scale(1.08); }
+  .cs-play::after {
+    content: '';
+    width: 0; height: 0;
+    border-left: 22px solid #000;
+    border-top: 14px solid transparent;
+    border-bottom: 14px solid transparent;
+    margin-left: 6px;
+  }
+  .cs-video-content .label {
+    font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 4px;
+  }
+  .cs-video-content .hint {
+    font-size: 11px; color: var(--text-3);
+    text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600;
+  }
+
+  .cs-screen-caption {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+  }
+  .cs-screen-caption .num {
+    font-size: 48px; line-height: 0.9;
+    font-weight: 600; color: var(--accent);
+    letter-spacing: -2px;
+  }
+  .cs-screen-caption h4 { font-size: 20px; margin: 0 0 8px; line-height: 1.3; }
+  .cs-screen-caption p { font-size: 14px; color: var(--text-3); margin: 0; line-height: 1.6; max-width: 720px; }
+
+  /* =================== BLOCK 03: IMPACT =================== */
+  .cs-decisions {
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+  .cs-decision {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 32px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .cs-decision-key {
+    font-size: 13px; color: var(--text-3);
+    text-transform: uppercase; letter-spacing: 1.4px;
+    font-weight: 600;
+  }
+  .cs-decision h4 { font-size: 18px; margin: 0 0 8px; line-height: 1.4; letter-spacing: -0.2px; }
+  .cs-decision p { font-size: 14px; color: var(--text-3); margin: 0; line-height: 1.65; max-width: 680px; }
+
+  .cs-impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 48px 0;
+  }
+  .cs-impact {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    transition: border-color 200ms;
+  }
+  .cs-impact:hover { border-color: var(--accent); }
+  .cs-impact .stat {
+    font-size: 48px; font-weight: 600;
+    letter-spacing: -2px;
+    color: var(--accent); margin: 0 0 8px;
+    line-height: 1;
+  }
+  .cs-impact h4 { font-size: 15px; margin: 0 0 6px; }
+  .cs-impact p { font-size: 13px; color: var(--text-3); margin: 0; line-height: 1.55; }
+
+  /* =================== SOURCES =================== */
+  .cs-sources {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-top: 48px;
+  }
+  .cs-sources h4 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 1.4px;
+    color: var(--text-3); font-weight: 600;
+    margin: 0 0 20px;
+  }
+  .cs-sources p { font-size: 13px; color: var(--text-3); margin: 0 0 18px; line-height: 1.65; max-width: 760px; }
+  .cs-sources ul { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 32px; }
+  .cs-sources li {
+    font-size: 13px; padding: 4px 0; break-inside: avoid;
+    color: var(--text-3);
+  }
+  .cs-sources li a {
+    color: var(--text-2);
+    border-bottom: 1px dotted var(--text-4);
+    transition: color 120ms, border-color 120ms;
+  }
+  .cs-sources li a:hover { color: var(--accent); border-color: var(--accent); }
+  .cs-sources li .meta { color: var(--text-4); font-size: 11px; margin-left: 6px; }
+
+  /* =================== LIVE PROTOTYPE =================== */
+  .cs-live {
+    padding: 120px 32px;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(255, 234, 53, 0.08) 0%, transparent 60%),
+      var(--bg);
+    text-align: center;
+  }
+  .cs-live h2 {
+    font-size: clamp(40px, 5.5vw, 64px);
+    line-height: 1.08;
+    letter-spacing: -1.5px;
+    font-weight: 600;
+    margin: 0 auto 24px;
+    max-width: 900px;
+  }
+  .cs-live p {
+    font-size: 18px; line-height: 1.55; color: var(--text-3);
+    max-width: 600px; margin: 0 auto 40px;
+  }
+  .cs-live-cta {
+    display: inline-flex; align-items: center; gap: 14px;
+    background: var(--accent); color: #000;
+    padding: 18px 32px;
+    border-radius: 100px;
+    font-size: 16px; font-weight: 600;
+    letter-spacing: -0.2px;
+    transition: all 200ms;
+  }
+  .cs-live-cta:hover { background: var(--accent-deep); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255, 234, 53, 0.3); }
+  .cs-live-cta .arrow { transition: transform 200ms; }
+  .cs-live-cta:hover .arrow { transform: translateX(4px); }
+  .cs-alt-link {
+    display: block; margin-top: 18px;
+    font-size: 13px; color: var(--text-3);
+  }
+  .cs-alt-link a { color: var(--accent); border-bottom: 1px dotted var(--accent); }
+  .cs-alt-link a:hover { color: var(--accent-deep); border-color: var(--accent-deep); }
+
+  /* =================== FOOTER =================== */
+  .cs-footer {
+    padding: 64px 32px 80px;
+    background: var(--bg-2);
+  }
+  .cs-footer-inner { max-width: 1100px; margin: 0 auto; }
+  .cs-footer .sig {
+    font-size: 28px; font-weight: 600; letter-spacing: -0.6px;
+    margin-bottom: 24px;
+  }
+  .cs-footer p {
+    font-size: 16px; line-height: 1.65; color: var(--text-3);
+    margin: 0 0 16px; max-width: 720px;
+  }
+  .cs-footer a.email {
+    color: var(--accent); border-bottom: 1px solid var(--accent);
+  }
+  .cs-foot-meta {
+    margin-top: 40px; padding-top: 32px;
+    border-top: 1px solid var(--border);
+    font-size: 13px; color: var(--text-4);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+
+  /* =================== RESPONSIVE =================== */
+  @media (max-width: 900px) {
+    .cs-tldr { grid-template-columns: 1fr; }
+    .cs-tldr-cell { border-right: none; border-bottom: 1px solid var(--border); }
+    .cs-tldr-cell:last-child { border-bottom: none; }
+    .cs-themes { grid-template-columns: 1fr; }
+    .cs-impact-grid { grid-template-columns: 1fr; }
+    .cs-persona { grid-template-columns: 1fr; gap: 18px; }
+    .cs-avatar { width: 64px; height: 64px; font-size: 22px; }
+    .cs-decision { grid-template-columns: 1fr; gap: 8px; }
+    .cs-screen-caption { grid-template-columns: 1fr; }
+    .cs-screen-caption .num { font-size: 32px; }
+    .cs-sources ul { columns: 1; }
+    .cs-nav-inner { padding: 14px 20px; gap: 12px; }
+    .cs-nav-links a { padding: 6px 10px; font-size: 12px; }
+    .cs-nav .brand .by { display: none; }
+    .cs-section { padding: 64px 20px; }
+    .cs-hero { padding: 64px 20px 56px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ====================================================
+     STICKY NAV
+     ==================================================== -->
+<nav class="cs-nav">
+  <div class="cs-nav-inner">
+    <div class="brand">
+      <span class="mark"></span>
+      Profound · Action Plan
+      <span class="by">by Kendall Anderson</span>
+    </div>
+    <div class="cs-nav-links">
+      <a href="#block-01" class="nav-link">01 · Problem</a>
+      <a href="#block-02" class="nav-link">02 · Solution</a>
+      <a href="#block-03" class="nav-link">03 · Impact</a>
+      <a href="profound-prototype-light.html" class="cta" target="_blank">Live prototype →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ====================================================
+     HERO
+     ==================================================== -->
+<header class="cs-hero">
+  <div class="cs-hero-inner">
+    <span class="cs-eyebrow">Product Design Sample · For Profound</span>
+    <h1 class="cs-h1">Help marketing teams <mark>understand, explain, and ship</mark> what their data is telling them.</h1>
+    <p class="cs-lede">A redesign that turns Profound's industry-leading measurement into a story marketers can take into their CMO review — and a plan they can put into Monday's sprint.</p>
+    <div class="cs-byline">
+      <strong>Kendall Anderson</strong>
+      <span class="dot"></span>
+      <span>Product Designer</span>
+      <span class="dot"></span>
+      <span>For the <a href="https://www.tryprofound.com/careers/02707973-c9c1-4b36-8974-0334ebb35f15" style="color:var(--accent);">Product Designer role at Profound</a></span>
+      <span class="dot"></span>
+      <span>May 2026</span>
+    </div>
+
+    <!-- TL;DR strip — for skim-readers -->
+    <div class="cs-tldr">
+      <div class="cs-tldr-cell">
+        <div class="step">01 · Understand</div>
+        <h3>Make the data legible.</h3>
+        <p>Not just a number on a dashboard — a one-line diagnosis a marketer can paste into an email.</p>
+      </div>
+      <div class="cs-tldr-cell">
+        <div class="step">02 · Explain</div>
+        <h3>Give them a story to tell.</h3>
+        <p>Each finding paired with an AI-written rationale that holds up under questioning from a CMO.</p>
+      </div>
+      <div class="cs-tldr-cell">
+        <div class="step">03 · Ship</div>
+        <h3>Hand off the actual fix.</h3>
+        <p>An editable draft of the comparison page, schema, or URL pattern — routed to Linear/Jira/Slack.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ====================================================
+     BLOCK 01 · PROBLEM
+     ==================================================== -->
+<section class="cs-section" id="block-01">
+  <div class="cs-inner">
+    <span class="cs-block-num">01 · PROBLEM</span>
+    <h2 class="cs-h2">Profound measures AI visibility better than anyone — but customers can't <mark>defend, explain, or ship</mark> what they see.</h2>
+
+    <p class="cs-p">Three themes recur across public reviews. Paraphrased, not quoted.</p>
+
+    <div class="cs-themes">
+      <div class="cs-theme">
+        <span class="theme-tag">Understand</span>
+        <span class="qmark">"</span>
+        <p>"There's a lot of data, but nothing tells me which of these numbers I should care about this week."</p>
+      </div>
+      <div class="cs-theme">
+        <span class="theme-tag">Explain</span>
+        <span class="qmark">"</span>
+        <p>"My CMO asks why we're losing on certain prompts and I can't give an answer that doesn't sound like a guess."</p>
+      </div>
+      <div class="cs-theme">
+        <span class="theme-tag">Ship</span>
+        <span class="qmark">"</span>
+        <p>"Even when I know what to do, the fix sits in a doc — it doesn't make it into our sprint."</p>
+      </div>
+    </div>
+
+    <h3 class="cs-h3" style="margin-top:64px;">Who I designed for</h3>
+    <p class="cs-p">A representative user — Maya — built from Profound's case studies (GR0) and the patterns in their reviews.</p>
+
+    <div class="cs-persona">
+      <div class="cs-avatar">M</div>
+      <div>
+        <h4>Maya R. — Director of Marketing</h4>
+        <div class="role">Enterprise SaaS · 8-brand portfolio · reports to CMO</div>
+        <ul>
+          <li><strong>Wants:</strong> a one-page summary she can take into Monday's standup.</li>
+          <li><strong>Hates:</strong> being asked "so what?" and having to spend an hour translating dashboards into a doc.</li>
+          <li><strong>Has:</strong> a content lead, an SEO contractor, an engineer she shares with product.</li>
+          <li><strong>Measured on:</strong> AI-sourced pipeline contribution — not visibility score itself.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cs-insight">
+      <div class="label">Design bet</div>
+      <p>Profound already knows <em>what</em> is happening and likely knows <em>why</em>. If we surface the diagnosis in <strong>plain English</strong>, draft the fix, and route it to where work happens — Profound becomes <strong>easier to use, easier to defend, and easier to renew</strong>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================
+     BLOCK 02 · SOLUTION
+     ==================================================== -->
+<section class="cs-section alt" id="block-02">
+  <div class="cs-inner">
+    <span class="cs-block-num">02 · SOLUTION</span>
+    <h2 class="cs-h2">An <mark>Action Plan</mark> surface that lives inside Profound's existing IA.</h2>
+
+    <p class="cs-p">Two views — Action Plan home and Action Recipe drill-in — slot into Profound's current ACTION section, between Content and the in-beta Opportunities. Same data, new layer of meaning.</p>
+
+    <!-- ====== SCREEN 01 ====== -->
+    <div class="cs-screen-block">
+      <div class="cs-screen-frame">
+        <div class="chrome">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="url">platform.tryprofound.com / action-plan</span>
+        </div>
+        <!-- VIDEO SLOT 1 — REPLACE WITH FRAMER VIDEO COMPONENT -->
+        <div class="cs-screen-img">
+          <div class="cs-video-slot">
+            <div class="cs-video-content">
+              <div class="cs-play"></div>
+              <div class="label">Walkthrough · Action Plan home</div>
+              <div class="hint">Replace this slot with your Framer Video component</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cs-screen-caption">
+        <div class="num">01</div>
+        <div>
+          <h4>The Monday-morning narrative.</h4>
+          <p>Hero answers <em>"how am I doing?"</em> in one sentence Maya can paste into a CMO email. Cards show three things to ship this sprint, ranked by impact × effort, each with a one-line rationale she can defend out loud.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== SCREEN 02 ====== -->
+    <div class="cs-screen-block">
+      <div class="cs-screen-frame">
+        <div class="chrome">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="url">platform.tryprofound.com / action-plan / vendora-comparison</span>
+        </div>
+        <!-- VIDEO SLOT 2 — REPLACE WITH FRAMER VIDEO COMPONENT -->
+        <div class="cs-screen-img">
+          <div class="cs-video-slot">
+            <div class="cs-video-content">
+              <div class="cs-play"></div>
+              <div class="label">Walkthrough · Action Recipe drill-in</div>
+              <div class="hint">Replace this slot with your Framer Video component</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cs-screen-caption">
+        <div class="num">02</div>
+        <div>
+          <h4>Diagnosis you can present, fix you can ship.</h4>
+          <p>Three blocks: <strong>Understand</strong> (which prompts, who's beating you, why — in copy-pasteable language), <strong>Explain &amp; ship</strong> (an editable draft of the page, schema, URL pattern, hero), and <strong>Hand off</strong> (one click to Linear, Jira, GitHub, or Slack).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Optional full-flow video slot -->
+    <div class="cs-video-slot standalone">
+      <div class="cs-video-content">
+        <div class="cs-play"></div>
+        <div class="label">Full flow · Plan → Recipe → Ship</div>
+        <div class="hint">Optional 30-sec walkthrough — drop in a Framer Video</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================
+     BLOCK 03 · IMPACT (4 decisions + 3 hypotheses + sources)
+     ==================================================== -->
+<section class="cs-section" id="block-03">
+  <div class="cs-inner">
+    <span class="cs-block-num">03 · IMPACT</span>
+    <h2 class="cs-h2">Four trade-offs, three hypotheses I'd <mark>instrument and prove</mark>.</h2>
+
+    <h3 class="cs-h3" style="margin-top:32px;">Design decisions</h3>
+
+    <div class="cs-decisions">
+      <div class="cs-decision">
+        <div class="cs-decision-key">Slot in, don't sprawl</div>
+        <div>
+          <h4>Built Action Plan inside Profound's existing ACTION section, next to Opportunities (Beta).</h4>
+          <p>The redesign should look like the next iteration of a roadmap item Profound's team already chose — not a parallel feature. Action Plan is the layer above Opportunities: same data, ranked, AI-explained, ship-ready.</p>
+        </div>
+      </div>
+
+      <div class="cs-decision">
+        <div class="cs-decision-key">Explicit prioritization</div>
+        <div>
+          <h4>Ranking is shown as <em>impact × effort</em>, not a black-box score.</h4>
+          <p>Marketers escalate decisions. They need to defend ranking choices to a CMO. Showing the two underlying axes — and letting users re-sort — keeps the AI in a thinking-partner role, not an oracle. Trust compounds faster.</p>
+        </div>
+      </div>
+
+      <div class="cs-decision">
+        <div class="cs-decision-key">Drafts over briefs</div>
+        <div>
+          <h4>Each recipe ships an editable draft, not a recommendation doc.</h4>
+          <p>"Improve your comparison content" isn't actionable; a 1,200-word draft of <em>acme.com/vs/vendora</em> with FAQ schema attached is. This converts Profound's data into <em>commits</em>, not memos — and creates a clean expansion vector: each recipe is a candidate for a paid execution add-on.</p>
+        </div>
+      </div>
+
+      <div class="cs-decision">
+        <div class="cs-decision-key">Meet work where it lives</div>
+        <div>
+          <h4>One-click handoff to Linear, Jira, GitHub, Slack, or Email.</h4>
+          <p>Marketing teams don't run their sprints inside SEO tools. Profound becomes the planning layer; the customer's existing stack stays the execution layer. This preserves the data moat without trying to replace tools customers already love.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="cs-h3" style="margin-top:80px;">Business hypotheses</h3>
+    <p class="cs-p">What I'd want to instrument if I were on the team shipping this. Not promises.</p>
+
+    <div class="cs-impact-grid">
+      <div class="cs-impact">
+        <div class="stat">↓ 60%</div>
+        <h4>Time to first action</h4>
+        <p>From "logged in" to "shipped a fix" — the metric most correlated with retention in tools-of-record.</p>
+      </div>
+      <div class="cs-impact">
+        <div class="stat">↑ NRR</div>
+        <h4>Expansion vector</h4>
+        <p>Each recipe is a candidate for a paid execution add-on — Profound writes the page, Profound seeds the Reddit reply.</p>
+      </div>
+      <div class="cs-impact">
+        <div class="stat">→ Moat</div>
+        <h4>Defensibility</h4>
+        <p>Pure measurement is becoming a commodity. Owning the action layer is the durable position.</p>
+      </div>
+    </div>
+
+    <!-- ====== SOURCES (TRIMMED TO 8 MOST CREDIBLE) ====== -->
+    <div class="cs-sources">
+      <h4>Research · Sources cited</h4>
+      <p>Reddit threads weren't directly accessible to my crawler, so I used review aggregators that summarize Reddit/G2 sentiment as primary signal, alongside Profound's own surfaces.</p>
+      <ul>
+        <li><a href="https://www.tryprofound.com/" target="_blank">Profound — Homepage</a><span class="meta">brand voice, positioning</span></li>
+        <li><a href="https://www.tryprofound.com/brand" target="_blank">Profound — Brand Assets</a><span class="meta">color tokens, wordmark</span></li>
+        <li><a href="https://www.tryprofound.com/features/answer-engine-insights" target="_blank">Profound — Answer Engine Insights</a><span class="meta">existing dashboard structure</span></li>
+        <li><a href="https://www.tryprofound.com/customers/gr0" target="_blank">Profound — GR0 case study</a><span class="meta">enterprise persona inputs</span></li>
+        <li><a href="https://www.g2.com/products/profound/reviews" target="_blank">G2 — Profound reviews (135+)</a><span class="meta">primary review aggregate</span></li>
+        <li><a href="https://trakkr.ai/reviews/profound-review" target="_blank">Trakkr — Profound Review (2026)</a><span class="meta">pricing &amp; positioning critique</span></li>
+        <li><a href="https://www.scalenut.com/blogs/profound-ai-reviews" target="_blank">Scalenut — Profound AI Review</a><span class="meta">data-overload / learning-curve themes</span></li>
+        <li><a href="https://writesonic.com/blog/profound-review" target="_blank">Writesonic — Profound Review</a><span class="meta">enterprise vs. SMB framing</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================
+     LIVE PROTOTYPE
+     ==================================================== -->
+<section class="cs-live" id="live">
+  <div class="cs-inner">
+    <span class="cs-block-num">04 · LIVE PROTOTYPE</span>
+    <h2>Try the clickable build.</h2>
+    <p>Built to match Profound's actual UI. Cards drill into recipes. Tabs swap content. "Ship to Linear" actually fires a toast. Best on a laptop · Esc returns from any recipe.</p>
+    <a class="cs-live-cta" href="profound-prototype-light.html" target="_blank">
+      Open prototype
+      <span class="arrow">→</span>
+    </a>
+    <div class="cs-alt-link">Also available in <a href="profound-prototype.html" target="_blank">dark mode</a></div>
+  </div>
+</section>
+
+<!-- ====================================================
+     FOOTER
+     ==================================================== -->
+<footer class="cs-footer">
+  <div class="cs-footer-inner">
+    <div class="sig">— Kendall</div>
+    <p>Thanks for reading. I'd love to walk through the thinking on a call. I have variants sketched but not built — a multi-brand portfolio view for CMO-level oversight, and a Reddit-seeding recipe — ask me about them.</p>
+    <p>Reach me at <a class="email" href="mailto:andersonkendall24@gmail.com">andersonkendall24@gmail.com</a>.</p>
+    <div class="cs-foot-meta">
+      <span>Built May 2026 · For Profound's Product Designer role</span>
+      <span>HTML/CSS/JS · No framework · Framer-ready</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Highlight nav link as user scrolls
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.cs-nav .nav-link');
+  const setActive = () => {
+    let active = '';
+    sections.forEach(s => {
+      const r = s.getBoundingClientRect();
+      if (r.top <= 120 && r.bottom >= 120) active = s.id;
+    });
+    navLinks.forEach(l => {
+      l.classList.toggle('active', l.getAttribute('href') === '#' + active);
+    });
+  };
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+</script>
+
+</body>
+</html>
