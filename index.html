@@ -3,809 +3,2097 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profound · Action Plan — Case Study by Kendall Anderson</title>
+<title>Profound — Action Plan (Light Mode Prototype)</title>
 <style>
   /* =============================================================
-     PROFOUND CASE STUDY — FRAMER-READY · v2 (tightened)
-     Single self-contained HTML. 3 sections + Live Prototype.
-
-     Reframed around the buyer-defensible value prop:
-     Understand · Explain · Ship.
-
-     STRUCTURE FOR FRAMER IMPORT:
-     - <nav> sticky top nav
-     - <section id="block-01"> Problem
-     - <section id="block-02"> Solution (with video slots)
-     - <section id="block-03"> Impact + Sources
-     - <section id="live"> Live prototype CTA
-     - <footer>
+     PROFOUND — INTERACTIVE PROTOTYPE (LIGHT MODE)
+     Matches the newer customer-walkthrough screenshot:
+     - White canvas + white sidebar
+     - "Getting Started 2 of 6" onboarding widget
+     - Workspace switcher with brand avatar
+     - Top tabs include Shopping [Beta]
+     - Sidebar: Analytics group + Action group + What's New / Support
+     - Blue chart line (#3B82F6), yellow [Beta]/[New] flags
      ============================================================= */
 
   :root {
-    --bg: #08090C;
-    --bg-2: #0E1014;
-    --bg-3: #111217;
-    --panel: #16171D;
-    --panel-2: #1A1C22;
-    --border: rgba(255, 255, 255, 0.08);
-    --border-strong: rgba(255, 255, 255, 0.16);
-    --text: #FFFFFF;
-    --text-2: rgba(255, 255, 255, 0.84);
-    --text-3: rgba(255, 255, 255, 0.55);
-    --text-4: rgba(255, 255, 255, 0.36);
+    --bg: #FFFFFF;
+    --bg-2: #FAFAFA;
+    --bg-3: #F6F7F9;
+    --panel: #FFFFFF;
+    --panel-2: #F8F9FA;
+    --panel-hover: #F1F3F5;
+    --border: #E5E7EB;
+    --border-strong: #D1D5DB;
+    --border-soft: #F1F3F5;
+
+    --text: #000000;
+    --text-2: #1F2937;
+    --text-3: #6B7280;
+    --text-4: #9CA3AF;
+
     --accent: #FFEA35;
-    --accent-soft: rgba(255, 234, 53, 0.14);
+    --accent-soft: #FFF7CC;
     --accent-deep: #E0CC1A;
-    --good: #22C55E;
+
+    --blue: #3B82F6;
+    --blue-soft: #EFF6FF;
+
+    --good: #10B981;
+    --good-soft: #D1FAE5;
+    --warn: #F59E0B;
+    --warn-soft: #FEF3C7;
+    --danger: #EF4444;
+    --danger-soft: #FEE2E2;
   }
 
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+  html, body { margin: 0; padding: 0; height: 100%; background: var(--bg); }
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--bg);
     color: var(--text);
-    font-size: 16px;
-    line-height: 1.65;
+    font-size: 14px;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
+    overflow: hidden;
   }
+  button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  input { font: inherit; }
   a { color: inherit; text-decoration: none; }
 
-  /* =================== STICKY NAV =================== */
-  .cs-nav {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(8, 9, 12, 0.85);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-  }
-  .cs-nav-inner {
-    max-width: 1200px; margin: 0 auto;
-    padding: 18px 32px;
-    display: flex; align-items: center; gap: 24px;
-  }
-  .cs-nav .brand {
-    display: flex; align-items: center; gap: 10px;
-    font-weight: 600; font-size: 15px;
-    letter-spacing: -0.2px;
-    margin-right: auto;
-  }
-  .cs-nav .brand .mark {
-    width: 22px; height: 22px; border-radius: 5px;
-    background: white;
-    position: relative;
-    flex-shrink: 0;
-  }
-  .cs-nav .brand .mark::after {
-    content: '';
-    position: absolute;
-    inset: 5px;
-    background: black;
-    clip-path: polygon(0 0, 100% 0, 100% 60%, 60% 100%, 0 100%);
-  }
-  .cs-nav .brand .by { color: var(--text-3); font-weight: 400; margin-left: 6px; }
-  .cs-nav-links { display: flex; gap: 4px; align-items: center; }
-  .cs-nav a {
-    font-size: 13px; font-weight: 500; color: var(--text-3);
-    padding: 8px 14px;
-    border-radius: 6px;
-    transition: all 120ms;
-  }
-  .cs-nav a:hover { color: var(--text); background: var(--panel); }
-  .cs-nav a.active { color: var(--text); }
-  .cs-nav a.cta {
-    background: var(--accent); color: #000;
-    font-weight: 600;
-    padding: 8px 16px;
-    margin-left: 8px;
-  }
-  .cs-nav a.cta:hover { background: var(--accent-deep); color: #000; }
-
-  /* =================== HERO =================== */
-  .cs-hero {
-    padding: 96px 32px 80px;
-    background:
-      radial-gradient(circle at 80% 0%, rgba(255, 234, 53, 0.06) 0%, transparent 60%),
-      var(--bg);
-    border-bottom: 1px solid var(--border);
-  }
-  .cs-hero-inner { max-width: 1100px; margin: 0 auto; }
-  .cs-eyebrow {
-    display: inline-block;
-    font-size: 11px; font-weight: 700; letter-spacing: 1.6px;
-    color: var(--accent);
-    background: var(--accent-soft);
-    padding: 6px 12px; border-radius: 100px;
-    margin-bottom: 32px;
-    text-transform: uppercase;
-  }
-  .cs-h1 {
-    font-size: clamp(40px, 6vw, 76px);
-    line-height: 1.04;
-    letter-spacing: -2px;
-    font-weight: 600;
-    margin: 0 0 24px;
-    max-width: 1000px;
-  }
-  .cs-h1 mark { background: transparent; color: var(--accent); }
-  .cs-lede {
-    font-size: 21px; line-height: 1.55; color: var(--text-3);
-    max-width: 760px; margin: 0 0 40px;
-    font-weight: 400;
-  }
-  .cs-byline {
-    display: flex; gap: 16px 28px; flex-wrap: wrap;
-    align-items: center;
-    font-size: 13px; color: var(--text-3);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 22px 0;
-  }
-  .cs-byline strong { color: var(--text); font-weight: 500; }
-  .cs-byline .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-4); }
-
-  /* TL;DR strip */
-  .cs-tldr {
-    margin-top: 48px;
+  /* =================== APP SHELL =================== */
+  .app {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
+    grid-template-columns: 240px 1fr;
+    height: 100vh;
   }
-  .cs-tldr-cell {
-    padding: 28px;
+
+  /* =================== SIDEBAR (LIGHT) =================== */
+  .sidebar {
+    background: var(--bg);
     border-right: 1px solid var(--border);
-  }
-  .cs-tldr-cell:last-child { border-right: none; }
-  .cs-tldr .step {
-    font-size: 11px; font-weight: 700; letter-spacing: 1.6px;
-    color: var(--accent); margin-bottom: 12px;
-    text-transform: uppercase;
-  }
-  .cs-tldr h3 { font-size: 22px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.5px; }
-  .cs-tldr p { font-size: 13px; color: var(--text-3); margin: 0; line-height: 1.55; }
-
-  /* =================== SECTION SCAFFOLD =================== */
-  .cs-section { padding: 96px 32px; border-bottom: 1px solid var(--border); }
-  .cs-section.alt { background: var(--bg-2); }
-  .cs-inner { max-width: 1100px; margin: 0 auto; }
-
-  .cs-block-num {
-    font-size: 12px; font-weight: 700; letter-spacing: 2px;
-    color: var(--accent);
-    margin-bottom: 16px;
-    display: inline-block;
-  }
-  .cs-h2 {
-    font-size: clamp(32px, 4.4vw, 52px);
-    line-height: 1.12;
-    letter-spacing: -1.2px;
-    font-weight: 600;
-    margin: 0 0 24px;
-    max-width: 900px;
-  }
-  .cs-h2 mark { background: transparent; color: var(--accent); }
-  .cs-h3 { font-size: 24px; line-height: 1.3; font-weight: 600; letter-spacing: -0.4px; margin: 0 0 16px; }
-  .cs-h4 { font-size: 16px; font-weight: 600; margin: 0 0 8px; }
-  .cs-p {
-    font-size: 17px; line-height: 1.65;
-    color: var(--text-2); margin: 0 0 20px;
-    max-width: 760px;
-  }
-  .cs-p.muted { color: var(--text-3); font-size: 15px; }
-  .cs-p mark { background: var(--accent-soft); color: var(--accent); padding: 1px 4px; border-radius: 3px; }
-
-  /* =================== BLOCK 01: PROBLEM =================== */
-  .cs-themes {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin: 40px 0 16px;
-  }
-  .cs-theme {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px;
-    transition: border-color 200ms;
-  }
-  .cs-theme:hover { border-color: var(--border-strong); }
-  .cs-theme .theme-tag {
-    display: inline-block;
-    font-size: 11px; font-weight: 700; letter-spacing: 1.4px;
-    color: var(--accent);
-    margin-bottom: 16px;
-    text-transform: uppercase;
-  }
-  .cs-theme .qmark {
-    font-family: Georgia, serif;
-    font-size: 48px; line-height: 0.6;
-    color: var(--text-4);
-    display: block; margin-bottom: 12px;
-  }
-  .cs-theme p {
-    font-size: 15px; line-height: 1.55;
-    color: var(--text); margin: 0;
-    font-weight: 400;
-  }
-
-  .cs-persona {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px;
-    display: grid;
-    grid-template-columns: 96px 1fr;
-    gap: 28px;
-    align-items: start;
-    margin-top: 40px;
-  }
-  .cs-avatar {
-    width: 96px; height: 96px; border-radius: 50%;
-    background: var(--accent);
-    display: flex; align-items: center; justify-content: center;
-    color: #000; font-weight: 700; font-size: 32px;
-    letter-spacing: -1px;
-  }
-  .cs-persona h4 { font-size: 22px; margin: 0 0 4px; letter-spacing: -0.3px; }
-  .cs-persona .role { font-size: 14px; color: var(--text-3); margin-bottom: 16px; }
-  .cs-persona ul { margin: 0; padding-left: 20px; font-size: 15px; color: var(--text-2); }
-  .cs-persona li { margin-bottom: 8px; line-height: 1.5; }
-  .cs-persona li strong { color: var(--text); }
-
-  .cs-insight {
-    background: linear-gradient(135deg, var(--bg-3) 0%, var(--panel) 100%);
-    border: 1px solid var(--accent);
-    border-radius: 20px;
-    padding: 44px 48px;
-    margin-top: 48px;
-    position: relative;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
-  }
-  .cs-insight::before {
-    content: '';
-    position: absolute; top: -40px; right: -40px;
-    width: 200px; height: 200px;
-    background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-    opacity: 0.18;
-  }
-  .cs-insight .label {
-    font-size: 11px; font-weight: 700; letter-spacing: 1.6px;
-    color: var(--accent); margin-bottom: 16px;
-    text-transform: uppercase;
-  }
-  .cs-insight p {
-    font-size: clamp(20px, 2.4vw, 28px);
-    line-height: 1.4; margin: 0;
-    letter-spacing: -0.4px;
-    color: var(--text);
-    max-width: none;
-  }
-  .cs-insight strong { color: var(--accent); font-weight: 600; }
-
-  /* =================== BLOCK 02: SOLUTION =================== */
-  .cs-screen-block { margin: 56px 0; }
-  .cs-screen-frame {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.4);
-  }
-  .cs-screen-frame .chrome {
-    display: flex; align-items: center; gap: 6px;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-2);
-  }
-  .cs-screen-frame .chrome .dot {
-    width: 11px; height: 11px; border-radius: 50%; background: rgba(255,255,255,0.12);
-  }
-  .cs-screen-frame .chrome .url {
-    flex: 1; text-align: center;
-    font-size: 11px; color: var(--text-3);
-    font-family: ui-monospace, monospace;
-  }
-  .cs-screen-img {
-    width: 100%; aspect-ratio: 16 / 10;
-    background: var(--bg);
-    display: block;
+    padding: 14px 12px;
   }
 
-  .cs-video-slot {
-    position: relative;
-    background: var(--bg);
-    border: 2px dashed var(--border-strong);
-    border-radius: 0;
-    aspect-ratio: 16 / 10;
-    display: flex; align-items: center; justify-content: center;
-    overflow: hidden;
+  /* Workspace switcher */
+  .workspace {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 8px; margin-bottom: 14px;
+    border-radius: 8px;
+    transition: background 120ms;
     cursor: pointer;
-    transition: border-color 200ms, background 200ms;
   }
-  .cs-video-slot.standalone {
-    border-radius: 20px;
-    aspect-ratio: 16 / 9;
-    margin: 32px 0;
-  }
-  .cs-video-slot:hover { border-color: var(--accent); background: var(--bg-2); }
-  .cs-video-slot::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(circle at 50% 50%, rgba(255, 234, 53, 0.04), transparent 60%);
-  }
-  .cs-video-content { position: relative; text-align: center; padding: 24px; }
-  .cs-play {
-    width: 72px; height: 72px; border-radius: 50%;
-    background: var(--accent);
+  .workspace:hover { background: var(--panel-hover); }
+  .ws-avatar {
+    width: 26px; height: 26px; border-radius: 6px;
+    background: linear-gradient(135deg, #1E1B4B, #3730A3);
+    color: white;
     display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 18px;
-    transition: transform 200ms;
+    font-size: 10px; font-weight: 700;
+    flex-shrink: 0;
+    letter-spacing: -0.4px;
   }
-  .cs-video-slot:hover .cs-play { transform: scale(1.08); }
-  .cs-play::after {
-    content: '';
-    width: 0; height: 0;
-    border-left: 22px solid #000;
-    border-top: 14px solid transparent;
-    border-bottom: 14px solid transparent;
-    margin-left: 6px;
-  }
-  .cs-video-content .label {
-    font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 4px;
-  }
-  .cs-video-content .hint {
-    font-size: 11px; color: var(--text-3);
-    text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600;
+  .ws-name { font-size: 13px; font-weight: 600; flex: 1; color: var(--text); }
+  .ws-arrow {
+    color: var(--text-4); font-size: 10px;
+    display: flex; flex-direction: column; line-height: 0.6;
   }
 
-  .cs-screen-caption {
-    margin-top: 24px;
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 24px;
-  }
-  .cs-screen-caption .num {
-    font-size: 48px; line-height: 0.9;
-    font-weight: 600; color: var(--accent);
-    letter-spacing: -2px;
-  }
-  .cs-screen-caption h4 { font-size: 20px; margin: 0 0 8px; line-height: 1.3; }
-  .cs-screen-caption p { font-size: 14px; color: var(--text-3); margin: 0; line-height: 1.6; max-width: 720px; }
-
-  /* =================== BLOCK 03: IMPACT =================== */
-  .cs-decisions {
-    border-top: 1px solid var(--border);
-    margin-top: 40px;
-  }
-  .cs-decision {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 32px;
-    padding: 28px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .cs-decision-key {
-    font-size: 13px; color: var(--text-3);
-    text-transform: uppercase; letter-spacing: 1.4px;
-    font-weight: 600;
-  }
-  .cs-decision h4 { font-size: 18px; margin: 0 0 8px; line-height: 1.4; letter-spacing: -0.2px; }
-  .cs-decision p { font-size: 14px; color: var(--text-3); margin: 0; line-height: 1.65; max-width: 680px; }
-
-  .cs-impact-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin: 48px 0;
-  }
-  .cs-impact {
+  /* Search */
+  .search-box {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 10px;
     background: var(--panel);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px;
-    transition: border-color 200ms;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    transition: border-color 120ms;
   }
-  .cs-impact:hover { border-color: var(--accent); }
-  .cs-impact .stat {
-    font-size: 48px; font-weight: 600;
-    letter-spacing: -2px;
-    color: var(--accent); margin: 0 0 8px;
-    line-height: 1;
+  .search-box:focus-within { border-color: var(--text-3); }
+  .search-box svg { flex-shrink: 0; }
+  .search-box input {
+    flex: 1; border: none; background: transparent; outline: none;
+    font-size: 12px; color: var(--text);
   }
-  .cs-impact h4 { font-size: 15px; margin: 0 0 6px; }
-  .cs-impact p { font-size: 13px; color: var(--text-3); margin: 0; line-height: 1.55; }
+  .search-box input::placeholder { color: var(--text-4); }
+  .kbd {
+    font-family: 'SF Mono', ui-monospace, monospace;
+    font-size: 10px;
+    color: var(--text-3);
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+  }
 
-  /* =================== SOURCES =================== */
-  .cs-sources {
+  /* Getting Started widget */
+  .getting-started {
     background: var(--panel);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px;
-    margin-top: 48px;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 18px;
+    cursor: pointer;
+    transition: border-color 120ms;
   }
-  .cs-sources h4 {
-    font-size: 12px; text-transform: uppercase; letter-spacing: 1.4px;
-    color: var(--text-3); font-weight: 600;
-    margin: 0 0 20px;
+  .getting-started:hover { border-color: var(--text-3); }
+  .gs-top {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
   }
-  .cs-sources p { font-size: 13px; color: var(--text-3); margin: 0 0 18px; line-height: 1.65; max-width: 760px; }
-  .cs-sources ul { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 32px; }
-  .cs-sources li {
-    font-size: 13px; padding: 4px 0; break-inside: avoid;
+  .gs-title { font-size: 12px; font-weight: 600; color: var(--text); }
+  .gs-progress { font-size: 11px; color: var(--text-3); }
+  .gs-bar {
+    height: 4px; background: var(--bg-3); border-radius: 2px; overflow: hidden;
+  }
+  .gs-bar .fill {
+    height: 100%; width: 33%;
+    background: var(--good); border-radius: 2px;
+    transition: width 600ms;
+  }
+
+  /* Nav sections */
+  .nav-group { margin-bottom: 14px; }
+  .nav-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-3);
+    padding: 6px 10px 6px;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 10px; margin: 1px 0;
+    color: var(--text-2);
+    font-size: 13px; font-weight: 400;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: background 100ms, color 100ms;
+  }
+  .nav-item:hover { background: var(--panel-hover); color: var(--text); }
+  .nav-item.active {
+    background: var(--bg-3);
+    color: var(--text);
+    font-weight: 500;
+  }
+  .nav-item .ic {
+    width: 14px; height: 14px;
+    flex-shrink: 0;
     color: var(--text-3);
   }
-  .cs-sources li a {
-    color: var(--text-2);
-    border-bottom: 1px dotted var(--text-4);
-    transition: color 120ms, border-color 120ms;
+  .nav-item:hover .ic { color: var(--text-2); }
+  .nav-item.active .ic { color: var(--text); }
+  .nav-item .label { flex: 1; }
+  .nav-item .pill {
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 0.4px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--accent);
+    color: #000;
+    text-transform: uppercase;
   }
-  .cs-sources li a:hover { color: var(--accent); border-color: var(--accent); }
-  .cs-sources li .meta { color: var(--text-4); font-size: 11px; margin-left: 6px; }
+  .nav-item .pill.new {
+    background: var(--accent);
+    color: #000;
+    box-shadow: 0 0 0 0 rgba(255, 234, 53, 0.5);
+    animation: pulseBadge 2s ease-out infinite;
+  }
+  @keyframes pulseBadge {
+    0% { box-shadow: 0 0 0 0 rgba(255, 234, 53, 0.5); }
+    70% { box-shadow: 0 0 0 8px rgba(255, 234, 53, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 234, 53, 0); }
+  }
 
-  /* =================== LIVE PROTOTYPE =================== */
-  .cs-live {
-    padding: 120px 32px;
-    background:
-      radial-gradient(circle at 50% 0%, rgba(255, 234, 53, 0.08) 0%, transparent 60%),
-      var(--bg);
+  .sidebar-footer {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-soft);
+  }
+
+  .footer-user {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 120ms;
+    margin-top: 4px;
+  }
+  .footer-user:hover { background: var(--panel-hover); }
+  .footer-user .av {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: linear-gradient(135deg, #FCD34D, #F59E0B);
+    color: #000;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .footer-user .un { font-size: 12px; font-weight: 500; flex: 1; }
+
+  /* =================== MAIN AREA =================== */
+  .main {
+    display: flex; flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--bg);
+  }
+
+  /* Demo banner */
+  .demo-banner {
+    background: var(--bg-3);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-3);
+    font-size: 11px;
     text-align: center;
+    padding: 6px 16px;
+    flex-shrink: 0;
   }
-  .cs-live h2 {
-    font-size: clamp(40px, 5.5vw, 64px);
-    line-height: 1.08;
-    letter-spacing: -1.5px;
-    font-weight: 600;
-    margin: 0 auto 24px;
-    max-width: 900px;
-  }
-  .cs-live p {
-    font-size: 18px; line-height: 1.55; color: var(--text-3);
-    max-width: 600px; margin: 0 auto 40px;
-  }
-  .cs-live-cta {
-    display: inline-flex; align-items: center; gap: 14px;
-    background: var(--accent); color: #000;
-    padding: 18px 32px;
-    border-radius: 100px;
-    font-size: 16px; font-weight: 600;
-    letter-spacing: -0.2px;
-    transition: all 200ms;
-  }
-  .cs-live-cta:hover { background: var(--accent-deep); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255, 234, 53, 0.3); }
-  .cs-live-cta .arrow { transition: transform 200ms; }
-  .cs-live-cta:hover .arrow { transform: translateX(4px); }
-  .cs-alt-link {
-    display: block; margin-top: 18px;
-    font-size: 13px; color: var(--text-3);
-  }
-  .cs-alt-link a { color: var(--accent); border-bottom: 1px dotted var(--accent); }
-  .cs-alt-link a:hover { color: var(--accent-deep); border-color: var(--accent-deep); }
+  .demo-banner strong { color: var(--text); font-weight: 600; }
 
-  /* =================== FOOTER =================== */
-  .cs-footer {
-    padding: 64px 32px 80px;
-    background: var(--bg-2);
+  /* Topbar */
+  .topbar {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    height: 56px;
+    flex-shrink: 0;
+    display: flex; align-items: center;
+    padding: 0 28px;
+    gap: 14px;
   }
-  .cs-footer-inner { max-width: 1100px; margin: 0 auto; }
-  .cs-footer .sig {
-    font-size: 28px; font-weight: 600; letter-spacing: -0.6px;
+  .top-tabs {
+    display: flex; gap: 22px; height: 100%; align-items: center;
+    overflow-x: auto;
+  }
+  .top-tab {
+    font-size: 13px; font-weight: 400;
+    color: var(--text-3);
+    height: 100%;
+    display: flex; align-items: center; gap: 6px;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    margin-bottom: -1px;
+    padding: 0 2px;
+    transition: color 120ms;
+    white-space: nowrap;
+  }
+  .top-tab:hover { color: var(--text); }
+  .top-tab.active { color: var(--text); font-weight: 600; border-bottom-color: var(--text); }
+  .top-tab .pill {
+    font-size: 9px; font-weight: 700;
+    padding: 2px 6px; border-radius: 4px;
+    background: var(--accent); color: #000;
+    letter-spacing: 0.3px;
+  }
+
+  .topbar-spacer { flex: 1; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 30px; padding: 0 12px;
+    border-radius: 6px;
+    font-size: 12px; font-weight: 500;
+    background: var(--bg); color: var(--text-2);
+    border: 1px solid var(--border);
+    transition: all 120ms;
+    white-space: nowrap;
+  }
+  .btn:hover { background: var(--panel-hover); border-color: var(--border-strong); color: var(--text); }
+  .btn.primary { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
+  .btn.primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
+  .btn.dark { background: var(--text); color: white; border-color: var(--text); }
+  .btn.dark:hover { background: #2A2D33; }
+  .btn.ghost { border-color: transparent; }
+  .btn.ghost:hover { background: var(--panel-hover); }
+
+  /* Scrollable content */
+  .content {
+    flex: 1; overflow-y: auto; overflow-x: hidden;
+    scroll-behavior: smooth;
+    background: var(--bg);
+  }
+  .content::-webkit-scrollbar { width: 10px; }
+  .content::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.10); border-radius: 5px; }
+  .content::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.20); }
+
+  .container { max-width: 1320px; margin: 0 auto; padding: 28px 28px 64px; }
+
+  /* =================== VIEWS =================== */
+  .view { display: none; animation: fadeUp 320ms ease; }
+  .view.active { display: block; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* =================== ACTION PLAN VIEW =================== */
+  .page-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 12px; }
+  .page-title {
+    font-size: 26px; font-weight: 700; letter-spacing: -0.6px;
+    margin: 0;
+    display: flex; align-items: center; gap: 12px;
+    color: var(--text);
+  }
+  .page-title .new-flag {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
+    background: var(--accent); color: #000;
+    padding: 3px 7px; border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .page-sub { color: var(--text-3); font-size: 13px; margin: 0 0 18px; }
+
+  .top-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+
+  /* Sub-tabs */
+  .subtabs {
+    display: flex; gap: 24px;
+    border-bottom: 1px solid var(--border);
+    margin: 0 0 24px;
+  }
+  .subtab {
+    font-size: 13px; font-weight: 400; color: var(--text-3);
+    padding: 10px 0;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    cursor: pointer;
+    transition: color 120ms;
+  }
+  .subtab:hover { color: var(--text); }
+  .subtab.active { color: var(--text); font-weight: 600; border-bottom-color: var(--text); }
+
+  /* Hero card */
+  .hero {
+    background:
+      radial-gradient(circle at 95% 0%, rgba(255, 234, 53, 0.18) 0%, transparent 60%),
+      var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 26px 30px;
     margin-bottom: 24px;
   }
-  .cs-footer p {
-    font-size: 16px; line-height: 1.65; color: var(--text-3);
-    margin: 0 0 16px; max-width: 720px;
+  .hero .eyebrow {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
+    color: var(--text-2); margin-bottom: 12px;
+    text-transform: uppercase;
   }
-  .cs-footer a.email {
-    color: var(--accent); border-bottom: 1px solid var(--accent);
+  .hero h1 {
+    font-size: 28px; line-height: 1.2; letter-spacing: -0.6px;
+    margin: 0 0 8px;
+    font-weight: 600;
+    max-width: 880px;
+    color: var(--text);
   }
-  .cs-foot-meta {
-    margin-top: 40px; padding-top: 32px;
-    border-top: 1px solid var(--border);
-    font-size: 13px; color: var(--text-4);
-    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  .hero h1 .pop {
+    background: var(--accent);
+    color: #000;
+    padding: 0 6px; border-radius: 4px;
+  }
+  .hero .meta { color: var(--text-3); font-size: 12px; margin-bottom: 18px; }
+  .hero .row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
   }
 
+  /* Filter chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    height: 28px; padding: 0 12px;
+    border-radius: 14px;
+    font-size: 12px; font-weight: 500;
+    background: var(--bg); color: var(--text-2);
+    border: 1px solid var(--border);
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: all 120ms;
+    cursor: pointer;
+  }
+  .chip:hover { border-color: var(--text-3); color: var(--text); }
+  .chip.active { background: var(--text); color: white; border-color: var(--text); font-weight: 500; }
+  .chip .count { opacity: 0.6; font-weight: 500; }
+
+  /* Section header */
+  .section-head {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin: 28px 0 14px;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .section-head h2 { font-size: 16px; font-weight: 600; letter-spacing: -0.2px; margin: 0 0 3px; color: var(--text); }
+  .section-head .sub { font-size: 12px; color: var(--text-3); margin: 0; }
+  .sort-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 500;
+    color: var(--text-2);
+    cursor: pointer;
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+    transition: all 120ms;
+  }
+  .sort-btn:hover { background: var(--panel-hover); border-color: var(--border-strong); color: var(--text); }
+
+  /* Action cards */
+  .actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .action-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    cursor: pointer;
+    transition: all 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: flex; flex-direction: column;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .action-card:hover {
+    border-color: var(--text);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  }
+  .action-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 200ms;
+  }
+  .action-card:hover::before { transform: scaleY(1); }
+
+  .action-card .top {
+    display: flex; align-items: center; gap: 10px;
+    flex-wrap: wrap;
+  }
+  .priority {
+    height: 20px; padding: 0 8px;
+    border-radius: 4px;
+    font-size: 9px; font-weight: 700;
+    display: inline-flex; align-items: center;
+    letter-spacing: 0.5px;
+  }
+  .priority.high { background: var(--accent); color: #000; }
+  .priority.med { background: var(--panel-hover); color: var(--text-2); }
+  .priority.qw { background: var(--good-soft); color: var(--good); }
+
+  .action-card .meta { font-size: 11px; color: var(--text-3); }
+
+  .action-card h3 {
+    font-size: 16px; font-weight: 600; line-height: 1.35;
+    margin: 0;
+    letter-spacing: -0.2px;
+    color: var(--text);
+  }
+  .action-card .desc {
+    font-size: 12px; color: var(--text-3); line-height: 1.55; margin: 0;
+  }
+
+  .lift-row { display: flex; align-items: center; gap: 12px; }
+  .lift-bar {
+    flex: 1; height: 6px; background: var(--bg-3); border-radius: 3px;
+    overflow: hidden;
+  }
+  .lift-bar .fill {
+    height: 100%;
+    background: var(--text);
+    border-radius: 3px;
+    width: 0;
+    transition: width 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .lift-val { font-size: 12px; font-weight: 700; color: var(--text); white-space: nowrap; }
+
+  .action-card .footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: auto;
+    gap: 10px;
+  }
+  .action-card .footer .effort { font-size: 11px; color: var(--text-3); }
+  .open-recipe {
+    display: inline-flex; align-items: center; gap: 5px;
+    height: 28px; padding: 0 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 6px;
+    font-size: 11px; font-weight: 500;
+    transition: all 120ms;
+  }
+  .action-card:hover .open-recipe { background: var(--accent); color: #000; border-color: var(--accent); }
+  .open-recipe .arrow { transition: transform 120ms; }
+  .action-card:hover .open-recipe .arrow { transform: translateX(2px); }
+
+  /* Wide quick win card */
+  .quick-win {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 22px;
+    display: flex; align-items: center; gap: 20px;
+    cursor: pointer;
+    transition: all 200ms;
+    margin-bottom: 14px;
+  }
+  .quick-win:hover { border-color: var(--text); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+  .quick-win .text { flex: 1; }
+  .quick-win .text .row1 {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;
+  }
+  .quick-win h3 { font-size: 13px; font-weight: 600; margin: 0 0 3px; line-height: 1.4; color: var(--text); }
+  .quick-win .desc { font-size: 11px; color: var(--text-3); margin: 0; }
+
+  .view-all {
+    text-align: center;
+    color: var(--text-3); font-size: 12px; font-weight: 500;
+    padding: 14px;
+    cursor: pointer;
+    transition: color 120ms;
+  }
+  .view-all:hover { color: var(--text); }
+
+  /* =================== RECIPE VIEW =================== */
+  .breadcrumb {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px;
+    margin-bottom: 12px;
+    color: var(--text-3);
+  }
+  .crumb-link { cursor: pointer; transition: color 120ms; }
+  .crumb-link:hover { color: var(--text); }
+  .breadcrumb .sep { color: var(--text-4); }
+  .breadcrumb .current { color: var(--text); font-weight: 600; }
+
+  .recipe-hero {
+    background:
+      radial-gradient(circle at 0% 0%, rgba(255, 234, 53, 0.20) 0%, transparent 50%),
+      var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 30px;
+    margin-bottom: 28px;
+  }
+  .recipe-hero .top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .recipe-hero h1 { font-size: 24px; line-height: 1.25; letter-spacing: -0.4px; margin: 0 0 12px; font-weight: 700; color: var(--text); }
+  .recipe-hero .stats {
+    display: flex; gap: 22px; flex-wrap: wrap;
+    font-size: 12px; color: var(--text-3);
+  }
+  .recipe-hero .stats strong { color: var(--text); font-weight: 600; }
+  .recipe-hero .stats .lift {
+    background: var(--accent); color: #000;
+    padding: 2px 8px; border-radius: 4px;
+    font-weight: 600;
+  }
+
+  .section-block { margin-bottom: 28px; }
+  .section-block .label-row { margin-bottom: 12px; }
+  .section-block .label-row h2 {
+    font-size: 15px; font-weight: 700; margin: 0 0 3px; color: var(--text);
+  }
+  .section-block .label-row .sub {
+    font-size: 12px; color: var(--text-3); margin: 0;
+  }
+
+  /* Diagnosis grid */
+  .diag-grid {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.2fr;
+    gap: 0;
+    overflow: hidden;
+  }
+  .diag-col {
+    padding: 20px;
+    border-right: 1px solid var(--border);
+  }
+  .diag-col:last-child { border-right: none; }
+  .diag-col h3 {
+    font-size: 13px; font-weight: 600; margin: 0 0 4px; color: var(--text);
+  }
+  .diag-col .sub { font-size: 11px; color: var(--text-3); margin: 0 0 14px; }
+
+  .prompt-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0;
+    font-size: 12px;
+    border-bottom: 1px solid var(--border-soft);
+    color: var(--text-2);
+  }
+  .prompt-row:last-of-type { border-bottom: none; }
+  .prompt-row .vol { color: var(--text-3); }
+
+  .bar-row { margin-bottom: 12px; }
+  .bar-row .top-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; color: var(--text-2); }
+  .bar-row .top-row strong { color: var(--text); font-weight: 600; }
+  .bar-row .bar { height: 5px; background: var(--bg-3); border-radius: 3px; overflow: hidden; }
+  .bar-row .bar .fill { height: 100%; background: var(--text-3); }
+  .bar-row.you .bar .fill { background: var(--accent); }
+
+  .ai-explain {
+    background: var(--bg-2);
+    border-radius: 8px;
+    padding: 16px;
+    border: 1px solid var(--border);
+  }
+  .ai-explain .head {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+  }
+  .ai-explain .ai-dot {
+    width: 18px; height: 18px; border-radius: 50%; background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700; color: #000;
+  }
+  .ai-explain h4 { font-size: 12px; font-weight: 700; margin: 0; color: var(--text); }
+  .ai-explain p { font-size: 12px; line-height: 1.55; color: var(--text-2); margin: 0; }
+
+  .more-link {
+    display: inline-block; color: var(--text); font-size: 12px; font-weight: 600;
+    margin-top: 10px; cursor: pointer;
+    border-bottom: 1px solid var(--text);
+    padding-bottom: 1px;
+  }
+  .more-link:hover { color: var(--accent-deep); border-color: var(--accent-deep); }
+
+  /* Fix card */
+  .fix-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .fix-tabs {
+    display: flex; gap: 4px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .fix-tab {
+    height: 30px; padding: 0 12px;
+    border-radius: 6px;
+    font-size: 12px; font-weight: 500;
+    color: var(--text-3);
+    white-space: nowrap;
+    transition: all 120ms;
+    cursor: pointer;
+  }
+  .fix-tab:hover { color: var(--text); background: var(--panel-hover); }
+  .fix-tab.active { background: var(--text); color: white; font-weight: 600; }
+
+  .fix-body {
+    display: grid;
+    grid-template-columns: 1.65fr 1fr;
+    gap: 14px;
+    padding: 14px 18px 18px;
+  }
+
+  .editor {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .editor .urlbar {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    font-size: 12px;
+  }
+  .editor .urlbar .path { color: var(--text-3); }
+  .editor .urlbar .path .new {
+    background: var(--accent); color: #000;
+    padding: 0 5px; border-radius: 3px;
+    font-weight: 600;
+  }
+  .editor .urlbar .actions { margin-left: auto; display: flex; gap: 4px; align-items: center; }
+  .editor .urlbar .pill {
+    font-size: 9px; padding: 3px 6px; border-radius: 4px;
+    background: var(--accent); color: #000; font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .editor .urlbar .ic {
+    width: 22px; height: 22px; border-radius: 4px;
+    background: var(--bg-3);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 120ms;
+    color: var(--text-3);
+  }
+  .editor .urlbar .ic:hover { background: var(--panel-hover); color: var(--text); }
+
+  .editor-content { padding: 22px; }
+  .editor-content h4 { font-size: 17px; font-weight: 700; margin: 0 0 6px; line-height: 1.3; color: var(--text); }
+  .editor-content .meta { font-size: 11px; color: var(--text-3); margin: 0 0 16px; }
+  .editor-content h5 { font-size: 12px; font-weight: 700; margin: 14px 0 6px; color: var(--text); }
+  .editor-content p { font-size: 12px; color: var(--text-2); margin: 0 0 10px; line-height: 1.55; }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    font-size: 11px;
+    margin-top: 8px;
+  }
+  .compare-table th {
+    text-align: left;
+    padding: 8px 12px;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    color: var(--text-3);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-2);
+    text-transform: uppercase;
+  }
+  .compare-table th.acme { color: var(--text); background: var(--accent-soft); }
+  .compare-table td { padding: 8px 12px; border-bottom: 1px solid var(--border-soft); color: var(--text-2); }
+  .compare-table td.good { color: var(--good); font-weight: 500; }
+  .compare-table td.bad { color: var(--text-4); }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Side panel */
+  .side-panel {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    display: flex; flex-direction: column;
+    gap: 8px;
+  }
+  .side-panel h3 { font-size: 11px; font-weight: 600; margin: 0 0 4px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px; }
+  .side-row {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    display: flex; align-items: center; gap: 10px;
+    transition: all 120ms;
+    cursor: pointer;
+  }
+  .side-row:hover { border-color: var(--text-3); }
+  .side-row .body { flex: 1; }
+  .side-row .body strong { display: block; font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .side-row .body span { font-size: 10px; color: var(--text-3); }
+  .side-row .edit { font-size: 11px; color: var(--text); font-weight: 600; }
+
+  .regen-btn {
+    background: var(--accent); color: #000;
+    height: 34px; border-radius: 6px;
+    font-size: 12px; font-weight: 700;
+    margin-top: 4px;
+    transition: all 120ms;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .regen-btn:hover { background: var(--accent-deep); }
+  .regen-btn.loading { background: var(--accent-soft); pointer-events: none; }
+  .regen-btn.loading::before {
+    content: ''; width: 12px; height: 12px; border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.25); border-top-color: #000;
+    animation: spin 700ms linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Ship row */
+  .ship-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 22px;
+    display: flex; align-items: center; gap: 22px;
+    flex-wrap: wrap;
+  }
+  .ship-card .group { display: flex; flex-direction: column; gap: 6px; }
+  .ship-card .group-label {
+    font-size: 9px; letter-spacing: 0.5px; font-weight: 600; color: var(--text-4);
+    text-transform: uppercase;
+  }
+  .ship-card .assignee { display: flex; align-items: center; gap: 10px; }
+  .ship-card .avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    color: #000; font-size: 11px; font-weight: 700;
+  }
+  .ship-card .name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .ship-card .role { font-size: 11px; color: var(--text-3); }
+
+  .ship-divider { width: 1px; height: 44px; background: var(--border); }
+
+  .ship-targets { display: flex; gap: 6px; flex-wrap: wrap; }
+  .target-btn {
+    height: 30px; padding: 0 12px;
+    border-radius: 6px;
+    font-size: 12px; font-weight: 500;
+    background: var(--bg); border: 1px solid var(--border); color: var(--text-2);
+    transition: all 120ms;
+  }
+  .target-btn:hover { border-color: var(--text); background: var(--bg-2); color: var(--text); }
+
+  .primary-cta { margin-left: auto; }
+  .primary-ship {
+    height: 36px; padding: 0 18px;
+    background: var(--text); color: white;
+    border-radius: 8px;
+    font-size: 12px; font-weight: 700;
+    transition: all 120ms;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .primary-ship:hover { background: #2A2D33; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+  .primary-ship .arrow { transition: transform 120ms; }
+  .primary-ship:hover .arrow { transform: translateX(2px); }
+
+  /* =================== PORTFOLIO VIEW =================== */
+  .portfolio-hero {
+    background: linear-gradient(135deg, var(--bg-2) 0%, #FFFCEB 100%);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 22px;
+  }
+  .portfolio-hero .eyebrow {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
+    color: var(--text-2); margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .portfolio-hero h1 {
+    font-size: 24px; line-height: 1.25;
+    letter-spacing: -0.5px; font-weight: 600;
+    margin: 0 0 8px; color: var(--text);
+  }
+  .portfolio-hero h1 .pop {
+    background: var(--accent); color: var(--text);
+    padding: 0 6px; border-radius: 4px;
+  }
+  .portfolio-hero .stats-row {
+    display: flex; gap: 24px; flex-wrap: wrap;
+    margin-top: 14px;
+    font-size: 12px; color: var(--text-3);
+  }
+  .portfolio-hero .stats-row strong { color: var(--text); font-weight: 600; }
+
+  .attention-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .brand-card {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px;
+    cursor: pointer;
+    transition: all 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .brand-card:hover {
+    border-color: var(--text);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  }
+  .brand-card.urgent { border-color: rgba(239, 68, 68, 0.4); }
+  .brand-card.urgent::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--danger);
+  }
+  .brand-card.warn::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--warn);
+  }
+  .brand-card .top {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .brand-avatar {
+    width: 32px; height: 32px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 11px; font-weight: 700;
+    flex-shrink: 0; letter-spacing: -0.3px;
+  }
+  .brand-card .b-info { flex: 1; min-width: 0; }
+  .brand-name {
+    font-size: 14px; font-weight: 600; color: var(--text);
+    margin: 0; line-height: 1.3;
+  }
+  .brand-industry {
+    font-size: 11px; color: var(--text-3);
+  }
+  .brand-card .urgency-tag {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
+    padding: 3px 7px; border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .urgency-tag.urgent { background: var(--danger-soft); color: var(--danger); }
+  .urgency-tag.warn { background: var(--warn-soft); color: var(--warn); }
+
+  .brand-card .stats-mini {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .brand-card .stat-mini .label {
+    font-size: 9px; font-weight: 600; letter-spacing: 0.5px;
+    color: var(--text-4); text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .brand-card .stat-mini .value {
+    font-size: 18px; font-weight: 700;
+    letter-spacing: -0.4px; color: var(--text);
+    line-height: 1;
+  }
+  .brand-card .stat-mini .value.good { color: var(--good); }
+  .brand-card .stat-mini .value.danger { color: var(--danger); }
+  .brand-card .stat-mini .delta {
+    font-size: 11px; margin-left: 4px;
+  }
+  .brand-card .stat-mini .delta.good { color: var(--good); }
+  .brand-card .stat-mini .delta.danger { color: var(--danger); }
+  .brand-card .actions-line {
+    font-size: 11px; color: var(--text-3);
+    padding-top: 12px;
+    border-top: 1px solid var(--line-soft);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand-card .actions-line strong { color: var(--text); font-weight: 600; }
+  .brand-card .open-arrow {
+    font-size: 14px; color: var(--text-3);
+    transition: transform 120ms;
+  }
+  .brand-card:hover .open-arrow { color: var(--text); transform: translateX(3px); }
+
+  .brand-table-wrap {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .brand-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .brand-table th {
+    text-align: left;
+    padding: 12px 18px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
+    color: var(--text-3); text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-2);
+  }
+  .brand-table th.right { text-align: right; }
+  .brand-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line-soft);
+    cursor: pointer;
+    transition: background 120ms;
+    color: var(--text-2);
+  }
+  .brand-table td.right { text-align: right; }
+  .brand-table tr:hover td { background: var(--bg-2); }
+  .brand-table tr:last-child td { border-bottom: none; }
+  .brand-table .b-name {
+    font-weight: 600; color: var(--text);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .brand-table .avatar-sm {
+    width: 24px; height: 24px;
+    border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 9px; font-weight: 700;
+    flex-shrink: 0; letter-spacing: -0.2px;
+  }
+  .brand-table .delta-up { color: var(--good); font-weight: 600; }
+  .brand-table .delta-down { color: var(--danger); font-weight: 600; }
+  .brand-table .actions-pill {
+    display: inline-flex; align-items: center;
+    background: var(--accent-soft);
+    color: var(--text);
+    padding: 3px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 600;
+  }
+  .brand-table .actions-pill.urgent {
+    background: var(--danger-soft); color: var(--danger);
+  }
+  .brand-table .actions-pill.warn {
+    background: var(--warn-soft); color: var(--warn);
+  }
+
+  /* Portfolio breadcrumb on plan view */
+  .plan-breadcrumb {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px;
+    margin-bottom: 12px;
+    color: var(--text-3);
+  }
+  .plan-breadcrumb .crumb-link { cursor: pointer; transition: color 120ms; }
+  .plan-breadcrumb .crumb-link:hover { color: var(--text); }
+  .plan-breadcrumb .sep { color: var(--text-4); }
+  .plan-breadcrumb .current { color: var(--text); font-weight: 500; }
+
+  /* =================== TOAST =================== */
+  .toast-wrap {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    z-index: 999;
+    display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  .toast {
+    background: var(--text);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+    display: flex; align-items: center; gap: 10px;
+    animation: toastIn 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    pointer-events: auto;
+    min-width: 240px;
+  }
+  .toast .check {
+    width: 18px; height: 18px; border-radius: 50%; background: var(--accent);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #000; font-weight: 700; font-size: 11px;
+    flex-shrink: 0;
+  }
+  .toast .undo {
+    margin-left: auto; color: var(--accent); font-weight: 600;
+    cursor: pointer; font-size: 11px;
+  }
+  @keyframes toastIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .toast.out { animation: toastOut 240ms forwards; }
+  @keyframes toastOut { to { opacity: 0; transform: translateY(12px); } }
+
+  /* =================== TOOLTIP =================== */
+  [data-tip] { position: relative; }
+  [data-tip]:hover::after {
+    content: attr(data-tip);
+    position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    background: var(--text); color: white;
+    font-size: 11px; padding: 6px 10px; border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 50;
+    animation: fadeIn 120ms ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* =================== POPOVER =================== */
+  .popover {
+    position: absolute;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.10);
+    padding: 4px;
+    z-index: 100;
+    min-width: 200px;
+    display: none;
+    animation: fadeUp 160ms ease;
+  }
+  .popover.open { display: block; }
+  .popover .item {
+    padding: 8px 12px; font-size: 12px; border-radius: 4px;
+    cursor: pointer; transition: background 120ms;
+    color: var(--text-2);
+  }
+  .popover .item:hover { background: var(--panel-hover); color: var(--text); }
+  .popover .item.active { background: var(--accent-soft); color: var(--text); font-weight: 600; }
+
   /* =================== RESPONSIVE =================== */
-  @media (max-width: 900px) {
-    .cs-tldr { grid-template-columns: 1fr; }
-    .cs-tldr-cell { border-right: none; border-bottom: 1px solid var(--border); }
-    .cs-tldr-cell:last-child { border-bottom: none; }
-    .cs-themes { grid-template-columns: 1fr; }
-    .cs-impact-grid { grid-template-columns: 1fr; }
-    .cs-persona { grid-template-columns: 1fr; gap: 18px; }
-    .cs-avatar { width: 64px; height: 64px; font-size: 22px; }
-    .cs-decision { grid-template-columns: 1fr; gap: 8px; }
-    .cs-screen-caption { grid-template-columns: 1fr; }
-    .cs-screen-caption .num { font-size: 32px; }
-    .cs-sources ul { columns: 1; }
-    .cs-nav-inner { padding: 14px 20px; gap: 12px; }
-    .cs-nav-links a { padding: 6px 10px; font-size: 12px; }
-    .cs-nav .brand .by { display: none; }
-    .cs-section { padding: 64px 20px; }
-    .cs-hero { padding: 64px 20px 56px; }
+  @media (max-width: 1100px) {
+    .actions-grid { grid-template-columns: 1fr; }
+    .diag-grid { grid-template-columns: 1fr; }
+    .diag-col { border-right: none; border-bottom: 1px solid var(--border); }
+    .diag-col:last-child { border-bottom: none; }
+    .fix-body { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 720px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .container { padding: 16px; }
+    .topbar { padding: 0 14px; gap: 6px; overflow-x: auto; }
+    .ship-divider { display: none; }
+    .top-tabs { gap: 14px; }
   }
 </style>
 </head>
 <body>
 
-<!-- ====================================================
-     STICKY NAV
-     ==================================================== -->
-<nav class="cs-nav">
-  <div class="cs-nav-inner">
-    <div class="brand">
-      <span class="mark"></span>
-      Profound · Action Plan
-      <span class="by">by Kendall Anderson</span>
-    </div>
-    <div class="cs-nav-links">
-      <a href="#block-01" class="nav-link">01 · Problem</a>
-      <a href="#block-02" class="nav-link">02 · Solution</a>
-      <a href="#block-03" class="nav-link">03 · Impact</a>
-      <a href="profound-prototype-light.html" class="cta" target="_blank">Live prototype →</a>
-    </div>
-  </div>
-</nav>
+<div class="app" id="app">
 
-<!-- ====================================================
-     HERO
-     ==================================================== -->
-<header class="cs-hero">
-  <div class="cs-hero-inner">
-    <span class="cs-eyebrow">Product Design Sample · For Profound</span>
-    <h1 class="cs-h1">Help marketing teams <mark>understand, explain, and ship</mark> what their data is telling them.</h1>
-    <p class="cs-lede">A redesign that turns Profound's industry-leading measurement into a story marketers can take into their CMO review — and a plan they can put into Monday's sprint.</p>
-    <div class="cs-byline">
-      <strong>Kendall Anderson</strong>
-      <span class="dot"></span>
-      <span>Product Designer</span>
-      <span class="dot"></span>
-      <span>For the <a href="https://www.tryprofound.com/careers/02707973-c9c1-4b36-8974-0334ebb35f15" style="color:var(--accent);">Product Designer role at Profound</a></span>
-      <span class="dot"></span>
-      <span>May 2026</span>
+  <!-- ============== SIDEBAR (LIGHT) ============== -->
+  <aside class="sidebar">
+
+    <div class="workspace">
+      <div class="ws-avatar">AH</div>
+      <div class="ws-name">Acme Holdings</div>
+      <div class="ws-arrow">▴<br>▾</div>
     </div>
 
-    <!-- TL;DR strip — for skim-readers -->
-    <div class="cs-tldr">
-      <div class="cs-tldr-cell">
-        <div class="step">01 · Understand</div>
-        <h3>Make the data legible.</h3>
-        <p>Not just a number on a dashboard — a one-line diagnosis a marketer can paste into an email.</p>
-      </div>
-      <div class="cs-tldr-cell">
-        <div class="step">02 · Explain</div>
-        <h3>Give them a story to tell.</h3>
-        <p>Each finding paired with an AI-written rationale that holds up under questioning from a CMO.</p>
-      </div>
-      <div class="cs-tldr-cell">
-        <div class="step">03 · Ship</div>
-        <h3>Hand off the actual fix.</h3>
-        <p>An editable draft of the comparison page, schema, or URL pattern — routed to Linear/Jira/Slack.</p>
-      </div>
-    </div>
-  </div>
-</header>
-
-<!-- ====================================================
-     BLOCK 01 · PROBLEM
-     ==================================================== -->
-<section class="cs-section" id="block-01">
-  <div class="cs-inner">
-    <span class="cs-block-num">01 · PROBLEM</span>
-    <h2 class="cs-h2">Profound measures AI visibility better than anyone — but customers can't <mark>defend, explain, or ship</mark> what they see.</h2>
-
-    <p class="cs-p">Three themes recur across public reviews. Paraphrased, not quoted.</p>
-
-    <div class="cs-themes">
-      <div class="cs-theme">
-        <span class="theme-tag">Understand</span>
-        <span class="qmark">"</span>
-        <p>"There's a lot of data, but nothing tells me which of these numbers I should care about this week."</p>
-      </div>
-      <div class="cs-theme">
-        <span class="theme-tag">Explain</span>
-        <span class="qmark">"</span>
-        <p>"My CMO asks why we're losing on certain prompts and I can't give an answer that doesn't sound like a guess."</p>
-      </div>
-      <div class="cs-theme">
-        <span class="theme-tag">Ship</span>
-        <span class="qmark">"</span>
-        <p>"Even when I know what to do, the fix sits in a doc — it doesn't make it into our sprint."</p>
-      </div>
+    <div class="search-box">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <circle cx="5" cy="5" r="3.5" stroke="var(--text-4, #9CA3AF)" stroke-width="1.4"/>
+        <line x1="7.5" y1="7.5" x2="10.5" y2="10.5" stroke="var(--text-4, #9CA3AF)" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      <input type="text" placeholder="Search">
+      <span class="kbd">⌘K</span>
     </div>
 
-    <h3 class="cs-h3" style="margin-top:64px;">Who I designed for</h3>
-    <p class="cs-p">A representative user — Maya — built from Profound's case studies (GR0) and the patterns in their reviews.</p>
+    <div class="getting-started" data-tip="2 of 6 onboarding steps complete">
+      <div class="gs-top">
+        <span class="gs-title">Getting Started</span>
+        <span class="gs-progress">2 of 6</span>
+      </div>
+      <div class="gs-bar"><div class="fill"></div></div>
+    </div>
 
-    <div class="cs-persona">
-      <div class="cs-avatar">M</div>
-      <div>
-        <h4>Maya R. — Director of Marketing</h4>
-        <div class="role">Enterprise SaaS · 8-brand portfolio · reports to CMO</div>
-        <ul>
-          <li><strong>Wants:</strong> a one-page summary she can take into Monday's standup.</li>
-          <li><strong>Hates:</strong> being asked "so what?" and having to spend an hour translating dashboards into a doc.</li>
-          <li><strong>Has:</strong> a content lead, an SEO contractor, an engineer she shares with product.</li>
-          <li><strong>Measured on:</strong> AI-sourced pipeline contribution — not visibility score itself.</li>
-        </ul>
+    <div class="nav-group">
+      <div class="nav-label">Portfolio</div>
+      <button class="nav-item active" data-route="portfolio">
+        <svg class="ic" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.4"/><rect x="8" y="2" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.4"/><rect x="2" y="8" width="4" height="4" rx="1" fill="currentColor"/><rect x="8" y="8" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.4"/></svg>
+        <span class="label">All Brands</span>
+        <span class="pill new">New</span>
+      </button>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Analytics</div>
+      <button class="nav-item" data-route="overview">
+        <svg class="ic" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="4" height="4" stroke="currentColor" stroke-width="1.4"/><rect x="8" y="2" width="4" height="4" stroke="currentColor" stroke-width="1.4"/><rect x="2" y="8" width="4" height="4" stroke="currentColor" stroke-width="1.4"/><rect x="8" y="8" width="4" height="4" stroke="currentColor" stroke-width="1.4"/></svg>
+        <span class="label">Overview</span>
+      </button>
+      <button class="nav-item" data-route="aei">
+        <svg class="ic" viewBox="0 0 14 14" fill="none"><path d="M8 1 L3 8 H7 L6 13 L11 6 H7 Z" fill="currentColor"/></svg>
+        <span class="label">Answer Engine Insights</span>
+      </button>
+      <button class="nav-item" data-route="volumes">
+        <svg class="ic" viewBox="0 0 14 14" fill="none"><rect x="3" y="6" width="2" height="6" fill="currentColor"/><rect x="6.5" y="3" width="2" height="9" fill="currentColor"/><rect x="10" y="8" width="2" height="4" fill="currentColor"/></svg>
+        <span class="label">Prompt Volumes</span>
+      </button>
+      <button class="nav-item" data-route="agent-analytics">
+        <svg class="ic" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="2.5" stroke="currentColor" stroke-width="1.4"/><path d="M3 12 c0 -2 2 -3.5 4 -3.5 s4 1.5 4 3.5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        <span class="label">Agent Analytics</span>
+      </button>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Action</div>
+      <button class="nav-item" data-route="action-plan">
+        <svg class="ic" viewBox="0 0 14 14" fill="none"><path d="M3 7 l3 3 l5 -6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="label">Action Plan</span>
+      </button>
+      <button class="nav-item" data-route="opportunities">
+        <svg class="ic" viewBox="0 0 14 14" fill="none"><path d="M7 2 v3 M2 7 h3 M9 7 h3 M7 9 v3 M4 4 l1.5 1.5 M8.5 8.5 l1.5 1.5 M10 4 l-1.5 1.5 M5.5 8.5 l-1.5 1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <span class="label">Opportunities</span>
+        <span class="pill">Beta</span>
+      </button>
+      <button class="nav-item" data-route="content">
+        <svg class="ic" viewBox="0 0 14 14" fill="none"><path d="M3 3 h8 v8 h-8 z M5 5.5 h4 M5 7.5 h4 M5 9.5 h2.5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        <span class="label">Content</span>
+      </button>
+      <button class="nav-item" data-route="brand-hub">
+        <svg class="ic" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.4"/><circle cx="7" cy="7" r="1.5" fill="currentColor"/></svg>
+        <span class="label">Brand Hub</span>
+      </button>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="nav-item">
+        <svg class="ic" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 6 a1.5 1.5 0 0 1 3 0 c0 0.7 -0.7 1 -1.5 1.5 v0.5 M7 10 v0.1" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
+        <span class="label">Support</span>
+      </button>
+      <button class="nav-item">
+        <svg class="ic" viewBox="0 0 14 14" fill="none"><path d="M3 4 l8 -1 v8 l-8 -1 z M3 6 a2 2 0 0 0 0 4" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        <span class="label">What's New?</span>
+      </button>
+      <div class="footer-user">
+        <div class="av">KA</div>
+        <div class="un">Kendall A.</div>
+        <span style="color:var(--text-4);font-size:14px;">⋯</span>
       </div>
     </div>
+  </aside>
 
-    <div class="cs-insight">
-      <div class="label">Design bet</div>
-      <p>Profound already knows <em>what</em> is happening and likely knows <em>why</em>. If we surface the diagnosis in <strong>plain English</strong>, draft the fix, and route it to where work happens — Profound becomes <strong>easier to use, easier to defend, and easier to renew</strong>.</p>
+  <!-- ============== MAIN ============== -->
+  <main class="main">
+    <div class="demo-banner">
+      <strong>Interactive prototype · Light mode</strong> · Click any brand → opens its Action Plan · Click any action → opens the recipe · Esc returns one level
     </div>
-  </div>
-</section>
 
-<!-- ====================================================
-     BLOCK 02 · SOLUTION
-     ==================================================== -->
-<section class="cs-section alt" id="block-02">
-  <div class="cs-inner">
-    <span class="cs-block-num">02 · SOLUTION</span>
-    <h2 class="cs-h2">An <mark>Action Plan</mark> surface that lives inside Profound's existing IA.</h2>
+    <!-- Topbar with Profound's actual top tabs (light mode) -->
+    <header class="topbar">
+      <div class="top-tabs">
+        <div class="top-tab active">Visibility</div>
+        <div class="top-tab">Prompts</div>
+        <div class="top-tab">Query Fanouts</div>
+        <div class="top-tab">Platforms</div>
+        <div class="top-tab">Regions</div>
+        <div class="top-tab">Personas</div>
+        <div class="top-tab">Shopping <span class="pill">Beta</span></div>
+        <div class="top-tab">Sentiment</div>
+        <div class="top-tab">Citations</div>
+      </div>
+      <div class="topbar-spacer"></div>
+      <button class="btn ghost" data-tip="Settings">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.4"/><path d="M7 1 v2 M7 11 v2 M1 7 h2 M11 7 h2 M3 3 l1.4 1.4 M9.6 9.6 l1.4 1.4 M11 3 l-1.4 1.4 M4.4 9.6 l-1.4 1.4" stroke="currentColor" stroke-width="1.4"/></svg>
+        Settings
+      </button>
+      <button class="btn" id="exportBtn" onclick="toast('Exporting 136.2k answers as CSV…')">
+        ↓ Export 136.2k answers
+      </button>
+    </header>
 
-    <p class="cs-p">Two views — <strong>Action Plan home</strong> and <strong>Action Recipe drill-in</strong> — slot into Profound's current ACTION section, between Content and the in-beta Opportunities. The full prototype is embedded below — click any action card to drill into a recipe, then keep scrolling.</p>
+    <!-- Scrollable content -->
+    <div class="content" id="content">
 
-    <!-- ====== EMBEDDED LIVE PROTOTYPE ====== -->
-    <div class="cs-screen-block">
-      <div class="cs-screen-frame">
-        <div class="chrome">
-          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-          <span class="url">platform.tryprofound.com / action-plan</span>
+      <!-- ============== VIEW: PORTFOLIO (NEW · default) ============== -->
+      <section class="view active" id="view-portfolio">
+        <div class="container">
+
+          <div class="page-title-row">
+            <h1 class="page-title">Portfolio <span class="new-flag">New</span></h1>
+            <div style="display:flex;gap:6px;">
+              <button class="btn">Last 14 Days vs. Prev. Period ▾</button>
+              <button class="btn">Sort: Attention needed ▾</button>
+            </div>
+          </div>
+          <p class="page-sub">All 8 brands across Acme Holdings · Click any brand to drill into its Action Plan</p>
+
+          <!-- Hero -->
+          <div class="portfolio-hero">
+            <div class="eyebrow">PORTFOLIO OVERVIEW</div>
+            <h1>3 of your 8 brands need attention this week — totalling <span class="pop">+14.2%</span> in available visibility lift</h1>
+            <div class="stats-row">
+              <span><strong>89</strong> total pending actions</span>
+              <span><strong>5</strong> brands trending up</span>
+              <span><strong>3</strong> brands needing attention</span>
+              <span><strong>+2.4%</strong> avg portfolio change vs. prior period</span>
+            </div>
+          </div>
+
+          <!-- Needs attention section -->
+          <div class="section-head">
+            <div>
+              <h2>⚠ Needs attention this week</h2>
+              <p class="sub">Ranked by combination of visibility drop, urgency, and addressable lift</p>
+            </div>
+          </div>
+
+          <div class="attention-grid">
+
+            <!-- Brand 1: Berkshire Hathaway (urgent) -->
+            <article class="brand-card urgent" data-brand="berkshire">
+              <div class="top">
+                <div class="brand-avatar" style="background:#1E1B4B;">BH</div>
+                <div class="b-info">
+                  <h3 class="brand-name">Berkshire Hathaway</h3>
+                  <span class="brand-industry">Finance · Holdings</span>
+                </div>
+                <span class="urgency-tag urgent">Urgent</span>
+              </div>
+              <div class="stats-mini">
+                <div class="stat-mini">
+                  <div class="label">Visibility</div>
+                  <div class="value">0.6%</div>
+                </div>
+                <div class="stat-mini">
+                  <div class="label">Rank</div>
+                  <div class="value">#142</div>
+                </div>
+              </div>
+              <div class="actions-line">
+                <span><strong>24</strong> pending actions</span>
+                <span class="open-arrow">→</span>
+              </div>
+            </article>
+
+            <!-- Brand 2: Lumen AI (warn) -->
+            <article class="brand-card warn" data-brand="lumen">
+              <div class="top">
+                <div class="brand-avatar" style="background:#7C3AED;">LU</div>
+                <div class="b-info">
+                  <h3 class="brand-name">Lumen AI</h3>
+                  <span class="brand-industry">AI Tools · SaaS</span>
+                </div>
+                <span class="urgency-tag warn">Trending down</span>
+              </div>
+              <div class="stats-mini">
+                <div class="stat-mini">
+                  <div class="label">Visibility</div>
+                  <div class="value">18.4%<span class="delta danger">−3.8%</span></div>
+                </div>
+                <div class="stat-mini">
+                  <div class="label">Rank</div>
+                  <div class="value">#18</div>
+                </div>
+              </div>
+              <div class="actions-line">
+                <span><strong>15</strong> pending actions</span>
+                <span class="open-arrow">→</span>
+              </div>
+            </article>
+
+            <!-- Brand 3: Sapphire Apparel (warn) -->
+            <article class="brand-card warn" data-brand="sapphire">
+              <div class="top">
+                <div class="brand-avatar" style="background:#0EA5E9;">SA</div>
+                <div class="b-info">
+                  <h3 class="brand-name">Sapphire Apparel</h3>
+                  <span class="brand-industry">Retail · DTC</span>
+                </div>
+                <span class="urgency-tag warn">Trending down</span>
+              </div>
+              <div class="stats-mini">
+                <div class="stat-mini">
+                  <div class="label">Visibility</div>
+                  <div class="value">22.1%<span class="delta danger">−2.4%</span></div>
+                </div>
+                <div class="stat-mini">
+                  <div class="label">Rank</div>
+                  <div class="value">#11</div>
+                </div>
+              </div>
+              <div class="actions-line">
+                <span><strong>11</strong> pending actions</span>
+                <span class="open-arrow">→</span>
+              </div>
+            </article>
+
+          </div>
+
+          <!-- All brands table -->
+          <div class="section-head">
+            <div>
+              <h2>All brands</h2>
+              <p class="sub">Sortable by any column · Click any row to open that brand's Action Plan</p>
+            </div>
+            <div style="position:relative;">
+              <button class="sort-btn">View: All 8 ▾</button>
+            </div>
+          </div>
+
+          <div class="brand-table-wrap">
+            <table class="brand-table">
+              <thead>
+                <tr>
+                  <th>BRAND</th>
+                  <th>INDUSTRY</th>
+                  <th class="right">VISIBILITY</th>
+                  <th class="right">CHANGE</th>
+                  <th class="right">RANK</th>
+                  <th class="right">PENDING</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-brand="acme">
+                  <td><div class="b-name"><span class="avatar-sm" style="background:#FFEA35;color:#000;">AC</span>Acme Corp</div></td>
+                  <td>SaaS · B2B</td>
+                  <td class="right"><strong>52.5%</strong></td>
+                  <td class="right delta-up">+4.5%</td>
+                  <td class="right">#1</td>
+                  <td class="right"><span class="actions-pill">12</span></td>
+                </tr>
+                <tr data-brand="northwind">
+                  <td><div class="b-name"><span class="avatar-sm" style="background:#059669;">NW</span>Northwind Systems</div></td>
+                  <td>Enterprise SW</td>
+                  <td class="right"><strong>47.2%</strong></td>
+                  <td class="right delta-up">+0.6%</td>
+                  <td class="right">#2</td>
+                  <td class="right"><span class="actions-pill">4</span></td>
+                </tr>
+                <tr data-brand="sequoia">
+                  <td><div class="b-name"><span class="avatar-sm" style="background:#DC2626;">SQ</span>Sequoia Health</div></td>
+                  <td>Healthcare</td>
+                  <td class="right"><strong>41.7%</strong></td>
+                  <td class="right delta-up">+2.1%</td>
+                  <td class="right">#2</td>
+                  <td class="right"><span class="actions-pill">6</span></td>
+                </tr>
+                <tr data-brand="vendora">
+                  <td><div class="b-name"><span class="avatar-sm" style="background:#1F2937;">VE</span>Vendora</div></td>
+                  <td>SaaS · B2B</td>
+                  <td class="right"><strong>38.2%</strong></td>
+                  <td class="right delta-down">−1.2%</td>
+                  <td class="right">#4</td>
+                  <td class="right"><span class="actions-pill">8</span></td>
+                </tr>
+                <tr data-brand="forge">
+                  <td><div class="b-name"><span class="avatar-sm" style="background:#B45309;">FI</span>Forge Industries</div></td>
+                  <td>Manufacturing</td>
+                  <td class="right"><strong>28.9%</strong></td>
+                  <td class="right delta-up">+1.4%</td>
+                  <td class="right">#7</td>
+                  <td class="right"><span class="actions-pill">9</span></td>
+                </tr>
+                <tr data-brand="sapphire">
+                  <td><div class="b-name"><span class="avatar-sm" style="background:#0EA5E9;">SA</span>Sapphire Apparel</div></td>
+                  <td>Retail · DTC</td>
+                  <td class="right"><strong>22.1%</strong></td>
+                  <td class="right delta-down">−2.4%</td>
+                  <td class="right">#11</td>
+                  <td class="right"><span class="actions-pill warn">11</span></td>
+                </tr>
+                <tr data-brand="lumen">
+                  <td><div class="b-name"><span class="avatar-sm" style="background:#7C3AED;">LU</span>Lumen AI</div></td>
+                  <td>AI Tools · SaaS</td>
+                  <td class="right"><strong>18.4%</strong></td>
+                  <td class="right delta-down">−3.8%</td>
+                  <td class="right">#18</td>
+                  <td class="right"><span class="actions-pill warn">15</span></td>
+                </tr>
+                <tr data-brand="berkshire">
+                  <td><div class="b-name"><span class="avatar-sm" style="background:#1E1B4B;">BH</span>Berkshire Hathaway</div></td>
+                  <td>Finance · Holdings</td>
+                  <td class="right"><strong>0.6%</strong></td>
+                  <td class="right" style="color:var(--text-3);">—</td>
+                  <td class="right">#142</td>
+                  <td class="right"><span class="actions-pill urgent">24</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
         </div>
-        <div class="cs-screen-img">
-          <iframe src="profound-prototype-light.html"
-                  title="Profound Action Plan — embedded prototype"
-                  style="width:100%; height:100%; border:none; display:block;"></iframe>
+      </section>
+
+      <!-- ============== VIEW: ACTION PLAN ============== -->
+      <section class="view" id="view-plan">
+        <div class="container">
+
+          <div class="plan-breadcrumb">
+            <span class="crumb-link" onclick="showView('portfolio')">Portfolio</span>
+            <span class="sep">›</span>
+            <span class="current" id="plan-brand-crumb">Acme Corp</span>
+          </div>
+
+          <div class="page-title-row">
+            <h1 class="page-title">Action Plan <span class="new-flag">New</span></h1>
+            <div style="display:flex;gap:6px;">
+              <button class="btn" id="dateBtn">Last 14 Days vs. Prev. Period ▾</button>
+              <div class="popover" id="datePop">
+                <div class="item">Last 7 days</div>
+                <div class="item active">Last 14 days</div>
+                <div class="item">Last 30 days</div>
+                <div class="item">Last 90 days</div>
+                <div class="item">Custom range…</div>
+              </div>
+              <button class="btn">Daily ▾</button>
+            </div>
+          </div>
+          <p class="page-sub">Understand, explain, and ship the next steps that lift this brand's AI search visibility</p>
+
+          <div class="top-meta">
+            <button class="chip">⊕ Topics</button>
+            <button class="chip">⊕ Platforms</button>
+          </div>
+
+          <div class="subtabs">
+            <div class="subtab active">Overview</div>
+            <div class="subtab">By Engine</div>
+            <div class="subtab">By Region</div>
+            <div class="subtab">Competitors</div>
+            <div class="subtab">History</div>
+          </div>
+
+          <!-- Hero -->
+          <div class="hero">
+            <div class="eyebrow">YOUR AI ACTION PLAN</div>
+            <h1 id="heroTitle">12 prioritized actions to lift Acme Corp from <span class="pop">52.5%</span> → <span class="pop">62.8%</span> visibility</h1>
+            <div class="meta">Generated 6 min ago · 9 engines · Each action includes a one-line rationale you can paste into a CMO email</div>
+            <div class="row">
+              <div class="chips" id="filterChips">
+                <button class="chip active" data-filter="all">All actions <span class="count">· 12</span></button>
+                <button class="chip" data-filter="high">High impact <span class="count">· 4</span></button>
+                <button class="chip" data-filter="qw">Quick wins <span class="count">· 5</span></button>
+                <button class="chip" data-filter="content">Content <span class="count">· 6</span></button>
+                <button class="chip" data-filter="technical">Technical <span class="count">· 4</span></button>
+                <button class="chip" data-filter="reddit">Reddit <span class="count">· 2</span></button>
+              </div>
+              <button class="btn primary" onclick="toast('Plan exported to PDF', '↗')">Export plan ↗</button>
+            </div>
+          </div>
+
+          <!-- Top actions -->
+          <div class="section-head">
+            <div>
+              <h2>Top actions for this sprint</h2>
+              <p class="sub">AI-ranked by impact × effort · Each card includes a one-line rationale</p>
+            </div>
+            <div style="position:relative;">
+              <button class="sort-btn" id="sortBtn">Sort: Impact ▾</button>
+              <div class="popover" id="sortPop">
+                <div class="item active" data-sort="impact">Impact (highest first)</div>
+                <div class="item" data-sort="effort">Effort (lowest first)</div>
+                <div class="item" data-sort="confidence">AI confidence</div>
+                <div class="item" data-sort="recent">Most recent</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="actions-grid" id="actionsGrid">
+
+            <article class="action-card" data-impact="high" data-cat="content">
+              <div class="top">
+                <span class="priority high">HIGH · #1</span>
+                <span class="meta">Content · 4 engines</span>
+              </div>
+              <h3>Publish "Acme vs. Vendora" comparison page</h3>
+              <p class="desc">142 prompts ask this. No first-party page exists. Vendora wins citation 73% of the time today.</p>
+              <div>
+                <div style="font-size:9px;color:var(--text-4);font-weight:600;letter-spacing:0.5px;margin-bottom:5px;">EST. LIFT</div>
+                <div class="lift-row">
+                  <div class="lift-bar"><div class="fill" data-fill="75"></div></div>
+                  <div class="lift-val">+3.4%</div>
+                </div>
+              </div>
+              <div class="footer">
+                <span class="effort">⌚ 2-3 days · Content team</span>
+                <span class="open-recipe">Open recipe <span class="arrow">→</span></span>
+              </div>
+            </article>
+
+            <article class="action-card" data-impact="high" data-cat="technical">
+              <div class="top">
+                <span class="priority high">HIGH · #2</span>
+                <span class="meta">Technical · ChatGPT, Claude</span>
+              </div>
+              <h3>Restructure /pricing URL pattern + add FAQ schema</h3>
+              <p class="desc">68 high-volume pricing prompts cite competitors. Schema and URL structure block ChatGPT crawl.</p>
+              <div>
+                <div style="font-size:9px;color:var(--text-4);font-weight:600;letter-spacing:0.5px;margin-bottom:5px;">EST. LIFT</div>
+                <div class="lift-row">
+                  <div class="lift-bar"><div class="fill" data-fill="62"></div></div>
+                  <div class="lift-val">+2.1%</div>
+                </div>
+              </div>
+              <div class="footer">
+                <span class="effort">⌚ 1 day · Eng + SEO</span>
+                <span class="open-recipe">Open recipe <span class="arrow">→</span></span>
+              </div>
+            </article>
+
+            <article class="action-card" data-impact="med" data-cat="reddit">
+              <div class="top">
+                <span class="priority med">MED · #3</span>
+                <span class="meta">Reddit · 3 engines</span>
+              </div>
+              <h3>Seed expert reply on r/SaaS pricing megathread</h3>
+              <p class="desc">Reddit drives 26.6% of citations in your category. Thread is updated weekly and ranks for 41 prompts.</p>
+              <div>
+                <div style="font-size:9px;color:var(--text-4);font-weight:600;letter-spacing:0.5px;margin-bottom:5px;">EST. LIFT</div>
+                <div class="lift-row">
+                  <div class="lift-bar"><div class="fill" data-fill="49"></div></div>
+                  <div class="lift-val">+1.6%</div>
+                </div>
+              </div>
+              <div class="footer">
+                <span class="effort">⌚ 2 hrs · Marketing</span>
+                <span class="open-recipe">Open recipe <span class="arrow">→</span></span>
+              </div>
+            </article>
+
+            <article class="action-card" data-impact="med" data-cat="content">
+              <div class="top">
+                <span class="priority med">MED · #4</span>
+                <span class="meta">Content · Perplexity</span>
+              </div>
+              <h3>Rewrite top of /integrations for AI extractability</h3>
+              <p class="desc">Perplexity surfaces lists. Current page leads with marketing copy — restructure as scannable bullets.</p>
+              <div>
+                <div style="font-size:9px;color:var(--text-4);font-weight:600;letter-spacing:0.5px;margin-bottom:5px;">EST. LIFT</div>
+                <div class="lift-row">
+                  <div class="lift-bar"><div class="fill" data-fill="40"></div></div>
+                  <div class="lift-val">+1.3%</div>
+                </div>
+              </div>
+              <div class="footer">
+                <span class="effort">⌚ 4 hrs · Content team</span>
+                <span class="open-recipe">Open recipe <span class="arrow">→</span></span>
+              </div>
+            </article>
+
+          </div>
+
+          <article class="action-card quick-win" data-impact="qw" data-cat="technical">
+            <div class="text">
+              <div class="row1">
+                <span class="priority qw">QUICK WIN · #5</span>
+                <span class="meta">Technical · All engines · ⌚ 3 hrs · One PR</span>
+              </div>
+              <h3>Add author bylines + dates to 38 evergreen articles · est. +0.9% across all engines</h3>
+              <p class="desc">Profound has identified the exact 38 URLs and drafted bylines for review. Boosts trust signals across all surfaces.</p>
+            </div>
+            <span class="open-recipe">Open recipe <span class="arrow">→</span></span>
+          </article>
+
+          <div class="actions-grid">
+            <article class="action-card" data-impact="med" data-cat="content">
+              <div class="top">
+                <span class="priority med">MED · #6</span>
+                <span class="meta">Content · 2 engines</span>
+              </div>
+              <h3>Add a "How GR0 hit $100K MRR" case study landing page</h3>
+              <p class="desc">Customer-success queries surface case studies 4× more often than feature pages. You have 3 wins not yet documented.</p>
+              <div>
+                <div style="font-size:9px;color:var(--text-4);font-weight:600;letter-spacing:0.5px;margin-bottom:5px;">EST. LIFT</div>
+                <div class="lift-row">
+                  <div class="lift-bar"><div class="fill" data-fill="38"></div></div>
+                  <div class="lift-val">+1.2%</div>
+                </div>
+              </div>
+              <div class="footer">
+                <span class="effort">⌚ 1 day · Marketing</span>
+                <span class="open-recipe">Open recipe <span class="arrow">→</span></span>
+              </div>
+            </article>
+
+            <article class="action-card" data-impact="qw" data-cat="reddit">
+              <div class="top">
+                <span class="priority qw">QUICK WIN · #7</span>
+                <span class="meta">Reddit · ChatGPT</span>
+              </div>
+              <h3>Cross-post weekly changelog to r/AEO and r/SaaS</h3>
+              <p class="desc">Your changelog is high-signal but low-distribution. Cross-posting captures fresh-content boosts across 2 engines.</p>
+              <div>
+                <div style="font-size:9px;color:var(--text-4);font-weight:600;letter-spacing:0.5px;margin-bottom:5px;">EST. LIFT</div>
+                <div class="lift-row">
+                  <div class="lift-bar"><div class="fill" data-fill="28"></div></div>
+                  <div class="lift-val">+0.7%</div>
+                </div>
+              </div>
+              <div class="footer">
+                <span class="effort">⌚ 30 min · Recurring</span>
+                <span class="open-recipe">Open recipe <span class="arrow">→</span></span>
+              </div>
+            </article>
+          </div>
+
+          <div class="view-all" onclick="toast('Loading 7 more actions…')">View all 12 actions ↓</div>
+
         </div>
-      </div>
-      <div class="cs-screen-caption">
-        <div class="num">01</div>
-        <div>
-          <h4>From "how am I doing?" to "what should I ship?"</h4>
-          <p>Hero answers Maya's Monday-morning question in one sentence she can paste into a CMO email. Cards rank three things to ship this sprint by impact × effort, each with a one-line rationale she can defend out loud. <strong>Click any card above</strong> to open the recipe — diagnosis, AI-drafted fix, and one-click handoff to Linear, Jira, or Slack.</p>
+      </section>
+
+      <!-- ============== VIEW: RECIPE ============== -->
+      <section class="view" id="view-recipe">
+        <div class="container">
+
+          <div class="breadcrumb">
+            <span class="crumb-link" onclick="showView('plan')">Action Plan</span>
+            <span class="sep">›</span>
+            <span class="current" id="recipeTitleCrumb">Publish "Acme vs. Vendora" comparison page</span>
+          </div>
+
+          <div class="recipe-hero">
+            <div class="top">
+              <span class="priority high">HIGH · #1</span>
+              <span style="font-size:11px;color:var(--text-3);">Content · 4 engines · Generated by Profound AI · 6 min ago</span>
+            </div>
+            <h1 id="recipeTitle">Publish "Acme vs. Vendora" comparison page</h1>
+            <div class="stats">
+              <span><strong>Expected lift</strong> <span class="lift">+3.4% visibility</span></span>
+              <span><strong>Effort</strong> 2–3 days</span>
+              <span><strong>Owner</strong> Content team</span>
+              <span><strong>Confidence</strong> High (87%)</span>
+            </div>
+          </div>
+
+          <!-- Diagnosis -->
+          <div class="section-block">
+            <div class="label-row">
+              <h2>1. Understand</h2>
+              <p class="sub">The diagnosis you can take into a meeting</p>
+            </div>
+            <div class="diag-grid">
+
+              <div class="diag-col">
+                <h3>142 prompts ask this comparison</h3>
+                <p class="sub">Examples (top 3 by volume):</p>
+                <div class="prompt-row">
+                  <span>"Is Acme or Vendora better for enterprise?"</span>
+                  <span class="vol">2,140/mo</span>
+                </div>
+                <div class="prompt-row">
+                  <span>"Acme vs Vendora pricing"</span>
+                  <span class="vol">1,820/mo</span>
+                </div>
+                <div class="prompt-row">
+                  <span>"Switching from Vendora to Acme"</span>
+                  <span class="vol">980/mo</span>
+                </div>
+                <span class="more-link" onclick="toast('Opening all 142 prompts…')">View all 142 prompts →</span>
+              </div>
+
+              <div class="diag-col">
+                <h3>Who's cited today</h3>
+                <p class="sub">Across the 142 prompts</p>
+                <div class="bar-row">
+                  <div class="top-row"><span>Vendora.com</span><strong>73%</strong></div>
+                  <div class="bar"><div class="fill" style="width:73%"></div></div>
+                </div>
+                <div class="bar-row">
+                  <div class="top-row"><span>G2 / Capterra</span><strong>14%</strong></div>
+                  <div class="bar"><div class="fill" style="width:14%"></div></div>
+                </div>
+                <div class="bar-row">
+                  <div class="top-row"><span>Reddit threads</span><strong>9%</strong></div>
+                  <div class="bar"><div class="fill" style="width:9%"></div></div>
+                </div>
+                <div class="bar-row you">
+                  <div class="top-row"><span><strong>Acme.com</strong></span><strong>4%</strong></div>
+                  <div class="bar"><div class="fill" style="width:4%"></div></div>
+                </div>
+              </div>
+
+              <div class="diag-col">
+                <div class="ai-explain">
+                  <div class="head">
+                    <div class="ai-dot">AI</div>
+                    <h4>Why we recommend this</h4>
+                  </div>
+                  <p>Vendora dominates because they ship a structured comparison page (vendora.com/vs/acme) with a clear feature table, FAQ schema, and pricing parity row — the format ChatGPT &amp; Perplexity prefer for "X vs Y" queries. Acme has no first-party page on this topic, so engines fall back to G2 and Reddit, where Vendora's brand is mentioned 4.6× more frequently.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- The fix -->
+          <div class="section-block">
+            <div class="label-row">
+              <h2>2. Explain &amp; ship</h2>
+              <p class="sub">A draft you can edit, regenerate, or ship as-is</p>
+            </div>
+            <div class="fix-card">
+              <div class="fix-tabs" id="fixTabs">
+                <button class="fix-tab active" data-tab="page">Page draft</button>
+                <button class="fix-tab" data-tab="url">URL pattern</button>
+                <button class="fix-tab" data-tab="schema">Schema</button>
+                <button class="fix-tab" data-tab="hero">Hero image</button>
+                <button class="fix-tab" data-tab="links">Internal links</button>
+              </div>
+
+              <div class="fix-body">
+                <div class="editor">
+                  <div class="urlbar">
+                    <span class="path">acme.com/<span class="new">vs/vendora</span></span>
+                    <div class="actions">
+                      <span class="ic" data-tip="Copy URL" onclick="toast('URL copied')">⧉</span>
+                      <span class="ic" data-tip="Refresh" onclick="toast('Reloading preview…')">↻</span>
+                      <span class="pill">EDIT</span>
+                    </div>
+                  </div>
+
+                  <div class="editor-content" id="tab-page">
+                    <h4>Acme vs. Vendora: Honest Comparison (2026)</h4>
+                    <div class="meta">Updated May 2, 2026 · By Acme Engineering · 6 min read</div>
+                    <h5>Quick verdict</h5>
+                    <p>Acme is the right choice for teams that need multi-region tracking and Reddit intelligence baked in. Vendora is better if you've already standardized on Akamai and want their procurement workflow. We use both internally for different jobs.</p>
+                    <table class="compare-table">
+                      <thead>
+                        <tr><th>FEATURE</th><th class="acme">ACME</th><th>VENDORA</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr><td>Multi-region tracking</td><td class="good">✓ 47 regions</td><td class="good">✓ 12 regions</td></tr>
+                        <tr><td>SOC 2 Type II</td><td class="good">✓</td><td class="good">✓</td></tr>
+                        <tr><td>Reddit intelligence</td><td class="good">✓ Native</td><td class="bad">✗</td></tr>
+                        <tr><td>Pricing transparency</td><td class="good">Public</td><td class="bad">Quote-only</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="editor-content" id="tab-url" style="display:none;">
+                    <h4>URL pattern proposal</h4>
+                    <div class="meta">Mirrors how AI engines parse "X vs Y" queries</div>
+                    <p style="font-family: ui-monospace, monospace; background: var(--bg); padding: 12px; border: 1px solid var(--border); border-radius: 6px;">/vs/{competitor-slug}/</p>
+                    <h5>Examples to ship</h5>
+                    <p>· acme.com/vs/vendora<br>· acme.com/vs/competitor-b<br>· acme.com/vs/competitor-c</p>
+                    <p>Recommended: 301 redirect any existing /comparison/* paths to the new pattern. Maintains link equity and lets us add canonical tags cleanly.</p>
+                  </div>
+                  <div class="editor-content" id="tab-schema" style="display:none;">
+                    <h4>FAQPage + Product schema (JSON-LD)</h4>
+                    <div class="meta">Drop into &lt;head&gt;. Boosts citation rate in Google AI Overviews by ~22% in similar deployments.</div>
+                    <p style="font-family: ui-monospace, monospace; font-size: 11px; background: var(--bg); padding: 14px; border: 1px solid var(--border); border-radius: 6px; white-space: pre-line; line-height: 1.5; color: var(--text-2);">{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [{
+    "@type": "Question",
+    "name": "How does Acme compare to Vendora on pricing?",
+    "acceptedAnswer": {...}
+  }, ...]
+}</p>
+                  </div>
+                  <div class="editor-content" id="tab-hero" style="display:none;">
+                    <h4>Hero image</h4>
+                    <div class="meta">Profound generated 4 candidates. Pick one or upload your own.</div>
+                    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px;">
+                      <div style="aspect-ratio:16/9;background:var(--accent-soft);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text);font-weight:600;cursor:pointer;border:2px solid var(--accent);font-size:12px;">Option A ✓</div>
+                      <div style="aspect-ratio:16/9;background:#EFF6FF;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#3B82F6;font-weight:600;cursor:pointer;border:1px solid var(--border);font-size:12px;">Option B</div>
+                      <div style="aspect-ratio:16/9;background:#ECFDF5;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#10B981;font-weight:600;cursor:pointer;border:1px solid var(--border);font-size:12px;">Option C</div>
+                      <div style="aspect-ratio:16/9;background:var(--bg-2);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text-3);font-weight:500;cursor:pointer;border:1px dashed var(--border);font-size:12px;">+ Upload</div>
+                    </div>
+                  </div>
+                  <div class="editor-content" id="tab-links" style="display:none;">
+                    <h4>Internal links to add</h4>
+                    <div class="meta">Profound found 8 existing pages where adding a link to /vs/vendora would create topical authority signals.</div>
+                    <div class="prompt-row"><span>/blog/aeo-tools-comparison</span><span class="vol">High authority</span></div>
+                    <div class="prompt-row"><span>/pricing</span><span class="vol">High authority</span></div>
+                    <div class="prompt-row"><span>/blog/why-vendora-customers-switch</span><span class="vol">Medium</span></div>
+                    <div class="prompt-row"><span>/customers/gr0-case-study</span><span class="vol">Medium</span></div>
+                    <span class="more-link">View all 8 →</span>
+                  </div>
+                </div>
+
+                <aside class="side-panel">
+                  <h3>Suggestions</h3>
+                  <div class="side-row">
+                    <div class="body"><strong>Tone</strong><span>Honest, technical, even-handed</span></div>
+                    <span class="edit">Edit ▾</span>
+                  </div>
+                  <div class="side-row">
+                    <div class="body"><strong>Length</strong><span>~1,200 words · 6 min read</span></div>
+                    <span class="edit">Edit ▾</span>
+                  </div>
+                  <div class="side-row">
+                    <div class="body"><strong>Schema</strong><span>FAQPage + Product comparison</span></div>
+                    <span class="edit">Preview</span>
+                  </div>
+                  <div class="side-row">
+                    <div class="body"><strong>Citations</strong><span>8 sources auto-pulled, all reviewed</span></div>
+                    <span class="edit">View</span>
+                  </div>
+                  <button class="regen-btn" id="regenBtn">Regenerate with AI ↻</button>
+                </aside>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ship -->
+          <div class="section-block">
+            <div class="label-row">
+              <h2>3. Hand off</h2>
+              <p class="sub">Send to where your team already works</p>
+            </div>
+            <div class="ship-card">
+              <div class="group">
+                <span class="group-label">ASSIGN TO</span>
+                <div class="assignee">
+                  <div class="avatar">JC</div>
+                  <div>
+                    <div class="name">Jamie Chen</div>
+                    <div class="role">Content lead · due May 6</div>
+                  </div>
+                </div>
+              </div>
+              <div class="ship-divider"></div>
+              <div class="group">
+                <span class="group-label">SEND TO</span>
+                <div class="ship-targets">
+                  <button class="target-btn" onclick="toast('Created Linear ticket ENG-4192', '✓')">Linear</button>
+                  <button class="target-btn" onclick="toast('Jira ticket created in MKT-2026', '✓')">Jira</button>
+                  <button class="target-btn" onclick="toast('Pull request opened on acme/site', '✓')">GitHub PR</button>
+                  <button class="target-btn" onclick="toast('Posted to #marketing-actions', '✓')">Slack</button>
+                  <button class="target-btn" onclick="toast('Email drafted to Jamie', '✓')">Email</button>
+                </div>
+              </div>
+              <div class="primary-cta">
+                <button class="primary-ship" onclick="toast('Created Linear ticket ENG-4192 · assigned to Jamie Chen · due May 6', '✓')">Ship to Linear <span class="arrow">→</span></button>
+              </div>
+            </div>
+          </div>
+
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
-<!-- ====================================================
-     BLOCK 03 · IMPACT (4 decisions + 3 hypotheses + sources)
-     ==================================================== -->
-<section class="cs-section" id="block-03">
-  <div class="cs-inner">
-    <span class="cs-block-num">03 · IMPACT</span>
-    <h2 class="cs-h2">Four trade-offs, three hypotheses I'd <mark>instrument and prove</mark>.</h2>
+    </div><!-- /content -->
+  </main>
+</div>
 
-    <h3 class="cs-h3" style="margin-top:32px;">Design decisions</h3>
-
-    <div class="cs-decisions">
-      <div class="cs-decision">
-        <div class="cs-decision-key">Slot in, don't sprawl</div>
-        <div>
-          <h4>Built Action Plan inside Profound's existing ACTION section, next to Opportunities (Beta).</h4>
-          <p>The redesign should look like the next iteration of a roadmap item Profound's team already chose — not a parallel feature. Action Plan is the layer above Opportunities: same data, ranked, AI-explained, ship-ready.</p>
-        </div>
-      </div>
-
-      <div class="cs-decision">
-        <div class="cs-decision-key">Explicit prioritization</div>
-        <div>
-          <h4>Ranking is shown as <em>impact × effort</em>, not a black-box score.</h4>
-          <p>Marketers escalate decisions. They need to defend ranking choices to a CMO. Showing the two underlying axes — and letting users re-sort — keeps the AI in a thinking-partner role, not an oracle. Trust compounds faster.</p>
-        </div>
-      </div>
-
-      <div class="cs-decision">
-        <div class="cs-decision-key">Drafts over briefs</div>
-        <div>
-          <h4>Each recipe ships an editable draft, not a recommendation doc.</h4>
-          <p>"Improve your comparison content" isn't actionable; a 1,200-word draft of <em>acme.com/vs/vendora</em> with FAQ schema attached is. This converts Profound's data into <em>commits</em>, not memos — and creates a clean expansion vector: each recipe is a candidate for a paid execution add-on.</p>
-        </div>
-      </div>
-
-      <div class="cs-decision">
-        <div class="cs-decision-key">Meet work where it lives</div>
-        <div>
-          <h4>One-click handoff to Linear, Jira, GitHub, Slack, or Email.</h4>
-          <p>Marketing teams don't run their sprints inside SEO tools. Profound becomes the planning layer; the customer's existing stack stays the execution layer. This preserves the data moat without trying to replace tools customers already love.</p>
-        </div>
-      </div>
-    </div>
-
-    <h3 class="cs-h3" style="margin-top:80px;">Business hypotheses</h3>
-    <p class="cs-p">What I'd want to instrument if I were on the team shipping this. Not promises.</p>
-
-    <div class="cs-impact-grid">
-      <div class="cs-impact">
-        <div class="stat">↓ 60%</div>
-        <h4>Time to first action</h4>
-        <p>From "logged in" to "shipped a fix" — the metric most correlated with retention in tools-of-record.</p>
-      </div>
-      <div class="cs-impact">
-        <div class="stat">↑ NRR</div>
-        <h4>Expansion vector</h4>
-        <p>Each recipe is a candidate for a paid execution add-on — Profound writes the page, Profound seeds the Reddit reply.</p>
-      </div>
-      <div class="cs-impact">
-        <div class="stat">→ Moat</div>
-        <h4>Defensibility</h4>
-        <p>Pure measurement is becoming a commodity. Owning the action layer is the durable position.</p>
-      </div>
-    </div>
-
-    <!-- ====== SOURCES (TRIMMED TO 8 MOST CREDIBLE) ====== -->
-    <div class="cs-sources">
-      <h4>Research · Sources cited</h4>
-      <p>Reddit threads weren't directly accessible to my crawler, so I used review aggregators that summarize Reddit/G2 sentiment as primary signal, alongside Profound's own surfaces.</p>
-      <ul>
-        <li><a href="https://www.tryprofound.com/" target="_blank">Profound — Homepage</a><span class="meta">brand voice, positioning</span></li>
-        <li><a href="https://www.tryprofound.com/brand" target="_blank">Profound — Brand Assets</a><span class="meta">color tokens, wordmark</span></li>
-        <li><a href="https://www.tryprofound.com/features/answer-engine-insights" target="_blank">Profound — Answer Engine Insights</a><span class="meta">existing dashboard structure</span></li>
-        <li><a href="https://www.tryprofound.com/customers/gr0" target="_blank">Profound — GR0 case study</a><span class="meta">enterprise persona inputs</span></li>
-        <li><a href="https://www.g2.com/products/profound/reviews" target="_blank">G2 — Profound reviews (135+)</a><span class="meta">primary review aggregate</span></li>
-        <li><a href="https://trakkr.ai/reviews/profound-review" target="_blank">Trakkr — Profound Review (2026)</a><span class="meta">pricing &amp; positioning critique</span></li>
-        <li><a href="https://www.scalenut.com/blogs/profound-ai-reviews" target="_blank">Scalenut — Profound AI Review</a><span class="meta">data-overload / learning-curve themes</span></li>
-        <li><a href="https://writesonic.com/blog/profound-review" target="_blank">Writesonic — Profound Review</a><span class="meta">enterprise vs. SMB framing</span></li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ====================================================
-     LIVE PROTOTYPE
-     ==================================================== -->
-<section class="cs-live" id="live">
-  <div class="cs-inner">
-    <span class="cs-block-num">04 · LIVE PROTOTYPE</span>
-    <h2>Try the clickable build.</h2>
-    <p>Built to match Profound's actual UI. Cards drill into recipes. Tabs swap content. "Ship to Linear" actually fires a toast. Best on a laptop · Esc returns from any recipe.</p>
-    <a class="cs-live-cta" href="profound-prototype-light.html" target="_blank">
-      Open prototype
-      <span class="arrow">→</span>
-    </a>
-    <div class="cs-alt-link">Also available in <a href="profound-prototype.html" target="_blank">dark mode</a></div>
-  </div>
-</section>
-
-<!-- ====================================================
-     FOOTER
-     ==================================================== -->
-<footer class="cs-footer">
-  <div class="cs-footer-inner">
-    <div class="sig">— Kendall</div>
-    <p>Thanks for reading. I'd love to walk through the thinking on a call. I have variants sketched but not built — a multi-brand portfolio view for CMO-level oversight, and a Reddit-seeding recipe — ask me about them.</p>
-    <p>Reach me at <a class="email" href="mailto:andersonkendall24@gmail.com">andersonkendall24@gmail.com</a>.</p>
-    <div class="cs-foot-meta">
-      <span>Built May 2026 · For Profound's Product Designer role</span>
-      <span>HTML/CSS/JS · No framework · Framer-ready</span>
-    </div>
-  </div>
-</footer>
+<div class="toast-wrap" id="toastWrap"></div>
 
 <script>
-  // Highlight nav link as user scrolls
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.cs-nav .nav-link');
-  const setActive = () => {
-    let active = '';
-    sections.forEach(s => {
-      const r = s.getBoundingClientRect();
-      if (r.top <= 120 && r.bottom >= 120) active = s.id;
-    });
-    navLinks.forEach(l => {
-      l.classList.toggle('active', l.getAttribute('href') === '#' + active);
-    });
+  const views = {
+    portfolio: document.getElementById('view-portfolio'),
+    plan: document.getElementById('view-plan'),
+    recipe: document.getElementById('view-recipe'),
   };
-  window.addEventListener('scroll', setActive, { passive: true });
-  setActive();
+
+  // Brand registry — clicking any brand from Portfolio updates the Plan view title
+  const BRANDS = {
+    acme: 'Acme Corp', vendora: 'Vendora', berkshire: 'Berkshire Hathaway',
+    sequoia: 'Sequoia Health', lumen: 'Lumen AI', forge: 'Forge Industries',
+    northwind: 'Northwind Systems', sapphire: 'Sapphire Apparel',
+  };
+  let currentBrand = 'Acme Corp';
+  const content = document.getElementById('content');
+
+  function showView(name, payload = {}) {
+    Object.entries(views).forEach(([k, el]) => el.classList.toggle('active', k === name));
+    content.scrollTo({ top: 0, behavior: 'smooth' });
+    if (name === 'recipe' && payload.title) {
+      document.getElementById('recipeTitle').textContent = payload.title;
+      document.getElementById('recipeTitleCrumb').textContent = payload.title;
+    }
+    if (name === 'plan') setTimeout(animateLiftBars, 80);
+  }
+
+  function animateLiftBars() {
+    document.querySelectorAll('[data-fill]').forEach(el => {
+      el.style.width = '0%';
+      requestAnimationFrame(() => {
+        setTimeout(() => { el.style.width = el.dataset.fill + '%'; }, 60);
+      });
+    });
+  }
+  animateLiftBars();
+
+  document.querySelectorAll('.action-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const title = card.querySelector('h3').textContent.trim();
+      showView('recipe', { title });
+    });
+  });
+
+  // Portfolio: clicking a brand card or table row opens that brand's Action Plan
+  document.querySelectorAll('[data-brand]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      // Avoid double-triggering if a child also has data-brand
+      if (e.target !== el && e.target.closest('[data-brand]') !== el) return;
+      const brand = el.dataset.brand;
+      if (BRANDS[brand]) {
+        currentBrand = BRANDS[brand];
+        // Update the Plan view's brand-aware breadcrumb
+        const crumb = document.getElementById('plan-brand-crumb');
+        if (crumb) crumb.textContent = currentBrand;
+        // Update the Action Plan nav item label so it reflects current brand context
+        showView('plan');
+        toast(`Opened ${currentBrand}'s Action Plan`, '✓');
+      }
+    });
+  });
+
+  const chips = document.querySelectorAll('#filterChips .chip');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const filter = chip.dataset.filter;
+      let visible = 0;
+      document.querySelectorAll('.action-card').forEach(card => {
+        const matches = filter === 'all' || card.dataset.impact === filter || card.dataset.cat === filter;
+        card.style.display = matches ? '' : 'none';
+        if (matches) visible++;
+      });
+      if (filter !== 'all') toast(`Filtered to ${visible} action${visible === 1 ? '' : 's'}`);
+    });
+  });
+
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      item.classList.add('active');
+      const route = item.dataset.route;
+      if (route === 'portfolio') showView('portfolio');
+      else if (route === 'action-plan') showView('plan');
+      else if (route) toast(`${item.querySelector('.label').textContent} · only Portfolio + Action Plan are built out for this prototype`, 'i');
+    });
+  });
+
+  document.querySelectorAll('.subtabs .subtab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.subtabs .subtab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      if (tab.textContent.trim() !== 'Overview') toast(`"${tab.textContent}" — only Overview is filled in for this prototype`, 'i');
+    });
+  });
+  document.querySelectorAll('.top-tabs .top-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.top-tabs .top-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const txt = tab.textContent.trim().split(' ')[0];
+      if (txt !== 'Visibility') toast(`Profound's "${txt}" tab — only the Visibility/Action Plan flow is built for this prototype`, 'i');
+    });
+  });
+
+  document.querySelectorAll('#fixTabs .fix-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('#fixTabs .fix-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const id = tab.dataset.tab;
+      ['page', 'url', 'schema', 'hero', 'links'].forEach(t => {
+        document.getElementById('tab-' + t).style.display = (t === id ? 'block' : 'none');
+      });
+    });
+  });
+
+  document.getElementById('regenBtn').addEventListener('click', (e) => {
+    const btn = e.currentTarget;
+    btn.classList.add('loading');
+    btn.textContent = 'Regenerating…';
+    setTimeout(() => {
+      btn.classList.remove('loading');
+      btn.innerHTML = 'Regenerate with AI ↻';
+      toast('New draft generated · 1,180 words', '✓');
+    }, 1400);
+  });
+
+  function setupPopover(triggerId, popId) {
+    const trig = document.getElementById(triggerId);
+    const pop = document.getElementById(popId);
+    if (!trig || !pop) return;
+    trig.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const r = trig.getBoundingClientRect();
+      pop.style.top = (r.bottom + 6) + 'px';
+      pop.style.left = (r.left) + 'px';
+      pop.classList.toggle('open');
+    });
+    pop.querySelectorAll('.item').forEach(it => {
+      it.addEventListener('click', () => {
+        pop.querySelectorAll('.item').forEach(x => x.classList.remove('active'));
+        it.classList.add('active');
+        if (triggerId === 'sortBtn') trig.textContent = 'Sort: ' + it.textContent.split(' ')[0] + ' ▾';
+        pop.classList.remove('open');
+      });
+    });
+  }
+  setupPopover('dateBtn', 'datePop');
+  setupPopover('sortBtn', 'sortPop');
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.popover.open').forEach(p => p.classList.remove('open'));
+  });
+
+  const toastWrap = document.getElementById('toastWrap');
+  function toast(msg, glyph = '✓') {
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = `<span class="check">${glyph}</span><span>${msg}</span><span class="undo" onclick="this.closest('.toast').classList.add('out')">Undo</span>`;
+    toastWrap.appendChild(el);
+    setTimeout(() => el.classList.add('out'), 2400);
+    el.addEventListener('animationend', () => { if (el.classList.contains('out')) el.remove(); });
+  }
+  window.toast = toast;
+  window.showView = showView;
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (views.recipe.classList.contains('active')) showView('plan');
+      else if (views.plan.classList.contains('active')) showView('portfolio');
+    }
+  });
+
+  setTimeout(() => toast('Click any brand to drill in · then any action → recipe · Esc returns', '👋'), 700);
 </script>
 
 </body>
